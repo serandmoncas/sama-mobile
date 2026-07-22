@@ -203,8 +203,21 @@ git commit -m "Add ESLint, Prettier, and typecheck tooling"
 
 - [ ] **Step 1: Install testing dependencies**
 
+> **Correction (2026-07-22, caught before dispatch):** the original pin here was
+> `react-test-renderer@19.2.8`, which is wrong on two counts: (a) it doesn't match
+> the project's `react@19.2.3` (react-test-renderer must match react's version),
+> and (b) `@testing-library/react-native@14.0.1` doesn't peer-depend on
+> `react-test-renderer` at all — as of v14 it requires the new `test-renderer`
+> package instead (confirmed via `npm view @testing-library/react-native@14.0.1
+> peerDependencies`, which lists `"test-renderer": "^1.0.0"` and no
+> `react-test-renderer` entry). `jest-expo` still bundles its own
+> `react-test-renderer@19.2.3` internally for its preset — that's automatic via
+> its own dependency tree and needs no explicit install. The corrected command
+> below installs `test-renderer@1.2.0` (peer-compatible with `react@^19.0.0`)
+> instead of `react-test-renderer`.
+
 ```bash
-npm install --save-dev jest@30.4.2 jest-expo@57.0.2 @types/jest@30.0.0 @testing-library/react-native@14.0.1 react-test-renderer@19.2.8
+npm install --save-dev jest@30.4.2 jest-expo@57.0.2 @types/jest@30.0.0 @testing-library/react-native@14.0.1 test-renderer@1.2.0
 ```
 
 - [ ] **Step 2: Add the Jest config and script to `package.json`**

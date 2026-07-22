@@ -6,7 +6,7 @@
 
 **Architecture:** Single Expo Router app scaffolded from the official `tabs` template, then trimmed and reshaped to SAMA's 5 tabs (Inicio, Mapa, Alertas, ¿Qué hago?, Reportar) plus a top-level `alerta/[id]` route reachable both by tab navigation and by an external URL (`sama://alerta/<id>`), which is how push notifications will later open the alert detail screen.
 
-**Tech Stack:** Expo SDK 57 (`expo` ~57.0.7, `expo-router` ~57.0.7), React Native 0.86.0, React 19.2.3, TypeScript ~6.0.3 (strict), ESLint 9.39.5 (flat config, `eslint-config-expo` 57.0.0) + Prettier 3.9.6, Jest 30 (`jest-expo` preset) + `@testing-library/react-native` 14.0.1, GitHub Actions.
+**Tech Stack:** Expo SDK 57 (`expo` ~57.0.7, `expo-router` ~57.0.7), React Native 0.86.0, React 19.2.3, TypeScript ~6.0.3 (strict), ESLint 9.39.5 (flat config, `eslint-config-expo` 57.0.0) + Prettier 3.9.6, Jest 29.7.0 (`jest-expo` preset) + `@testing-library/react-native` 14.0.1, GitHub Actions.
 
 > **Correction (2026-07-22, during Task 2 execution):** the plan originally pinned
 > `eslint@10.7.0` (npm's `latest` tag at plan-writing time). That version is
@@ -215,9 +215,22 @@ git commit -m "Add ESLint, Prettier, and typecheck tooling"
 > its own dependency tree and needs no explicit install. The corrected command
 > below installs `test-renderer@1.2.0` (peer-compatible with `react@^19.0.0`)
 > instead of `react-test-renderer`.
+>
+> **Second correction (2026-07-22, found during Task 3 execution):** `jest@30.4.2`
+> (as pinned above) is incompatible with `jest-expo@57.0.2`'s own Jest-29-based
+> internal dependency tree — it crashes with `clearMocksOnScope is not a
+> function` (a `jest-mock` version split). The correct pin is `jest@29.7.0`,
+> which matches jest-expo's actual ecosystem and still satisfies
+> `@testing-library/react-native@14.0.1`'s declared `jest: '>=29.0.0'` peer
+> range. The command below is corrected accordingly.
+>
+> **Third correction:** `@testing-library/react-native@14.0.1`'s `render()` is
+> async (part of the same v14 API shift as the `test-renderer` package change
+> above). The smoke test below awaits it; the same fix applies to Task 4's
+> `render()` call.
 
 ```bash
-npm install --save-dev jest@30.4.2 jest-expo@57.0.2 @types/jest@30.0.0 @testing-library/react-native@14.0.1 test-renderer@1.2.0
+npm install --save-dev jest@29.7.0 jest-expo@57.0.2 @types/jest@29.5.14 @testing-library/react-native@14.0.1 test-renderer@1.2.0
 ```
 
 - [ ] **Step 2: Add the Jest config and script to `package.json`**
@@ -230,6 +243,8 @@ Add `"test": "jest"` to `"scripts"`, and add this top-level key to `package.json
 }
 ```
 
+Also add `"types": ["jest"]` to `tsconfig.json`'s `"compilerOptions"` block — without it, `npm run typecheck` cannot resolve Jest's global `test`/`expect` identifiers used in the test file below and in Task 4's test.
+
 - [ ] **Step 3: Write the smoke test**
 
 `components/__tests__/Themed-test.tsx`:
@@ -238,8 +253,8 @@ Add `"test": "jest"` to `"scripts"`, and add this top-level key to `package.json
 import { render, screen } from '@testing-library/react-native';
 import { Text } from '../Themed';
 
-test('renders themed text', () => {
-  render(<Text>Hola SAMA</Text>);
+test('renders themed text', async () => {
+  await render(<Text>Hola SAMA</Text>);
   expect(screen.getByText('Hola SAMA')).toBeTruthy();
 });
 ```
@@ -525,8 +540,8 @@ jest.mock('expo-router', () => ({
   useLocalSearchParams: () => ({ id: '42' }),
 }));
 
-test('muestra el id recibido por parámetro de ruta', () => {
-  render(<AlertaDetailScreen />);
+test('muestra el id recibido por parámetro de ruta', async () => {
+  await render(<AlertaDetailScreen />);
   expect(screen.getByText('Alerta 42')).toBeTruthy();
 });
 ```

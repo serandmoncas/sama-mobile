@@ -25,6 +25,7 @@ Se evaluó monorepo (app + BFF NestJS juntos, como sugiere el backlog original) 
 4. Convenciones documentales versionadas en `docs/`: specs, ADRs, Definition of Done.
 5. La propuesta del MVP y el backlog completo (recibidos en la conversación de arranque) copiados a `docs/proposal/` como fuente de verdad versionada — dejan de vivir solo en el chat.
 6. `CLAUDE.md` que codifica el ciclo de la guía (spec-driven development, incrementos pequeños, verificación real, antipatrones a evitar) como reglas operativas para agentes de IA en este repo, incluyendo los comandos concretos de este proyecto.
+7. **(Añadido 2026-07-22, tras aprobar el diseño original)** `README.md` real, con doble propósito: onboarding técnico (qué es, cómo correrlo, dónde están los docs) y pieza de portafolio profesional. El cliente (Dagran/Gobernación de Antioquia) se nombra explícitamente; las cifras de presupuesto/inversión de la propuesta **no** se incluyen en el README público — decisión explícita del autor dado que el repo es público.
 
 ### Explícitamente fuera de este ciclo (no-objetivos)
 - Cualquier pantalla con lógica real: mapa, alertas push, contenido offline, reporte ciudadano (F1–F5).
@@ -73,6 +74,7 @@ sama-mobile/
 │   │   └── 0001-repos-separados-app-bff.md
 │   └── DEFINITION_OF_DONE.md
 ├── CLAUDE.md
+├── README.md
 └── .github/workflows/ci.yml
 ```
 
@@ -86,6 +88,7 @@ sama-mobile/
 - [ ] `docs/proposal/` contiene la propuesta y el backlog completos.
 - [ ] `CLAUDE.md` explica el ciclo, comandos y convenciones del repo.
 - [ ] `docs/specs/TEMPLATE.md` y `docs/DEFINITION_OF_DONE.md` existen para que el próximo ticket los use sin reinventar el formato.
+- [ ] `README.md` reemplaza el placeholder original: describe el proyecto, el cliente (sin cifras de presupuesto), el stack, cómo correrlo y enlaza a `docs/proposal/`, `docs/adr/`, `CLAUDE.md`.
 
 ## Verificación
 

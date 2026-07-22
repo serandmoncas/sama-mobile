@@ -6,7 +6,17 @@
 
 **Architecture:** Single Expo Router app scaffolded from the official `tabs` template, then trimmed and reshaped to SAMA's 5 tabs (Inicio, Mapa, Alertas, ¿Qué hago?, Reportar) plus a top-level `alerta/[id]` route reachable both by tab navigation and by an external URL (`sama://alerta/<id>`), which is how push notifications will later open the alert detail screen.
 
-**Tech Stack:** Expo SDK 57 (`expo` ~57.0.7, `expo-router` ~57.0.7), React Native 0.86.0, React 19.2.3, TypeScript ~6.0.3 (strict), ESLint 10 (flat config, `eslint-config-expo` 57.0.0) + Prettier 3.9.6, Jest 30 (`jest-expo` preset) + `@testing-library/react-native` 14.0.1, GitHub Actions.
+**Tech Stack:** Expo SDK 57 (`expo` ~57.0.7, `expo-router` ~57.0.7), React Native 0.86.0, React 19.2.3, TypeScript ~6.0.3 (strict), ESLint 9.39.5 (flat config, `eslint-config-expo` 57.0.0) + Prettier 3.9.6, Jest 30 (`jest-expo` preset) + `@testing-library/react-native` 14.0.1, GitHub Actions.
+
+> **Correction (2026-07-22, during Task 2 execution):** the plan originally pinned
+> `eslint@10.7.0` (npm's `latest` tag at plan-writing time). That version is
+> incompatible with `eslint-config-expo@57.0.0`, which depends on
+> `eslint-plugin-react@^7.37.3` — and no published `eslint-plugin-react` supports
+> ESLint 10 yet (peer range tops out at `^9.7`). Task 2's implementer hit this as a
+> real `npm run lint` crash and correctly stopped instead of guessing. The correct
+> pin is `eslint@9.39.5` (npm's `maintenance` dist-tag), which satisfies
+> `eslint-config-expo`'s declared peer range (`>=8.10`) and `eslint-plugin-react`'s
+> peer range. Task 2's install command below is corrected accordingly.
 
 ## Global Constraints
 
@@ -32,9 +42,11 @@ from that state — do not recreate `docs/proposal/`.
 ### Task 1: Scaffold the Expo app
 
 **Files:**
+
 - Create: everything under repo root produced by `create-expo-app` with the `tabs` template (`app/`, `assets/`, `components/`, `constants/`, `app.json`, `package.json`, `tsconfig.json`, `.gitignore`, `.vscode/`)
 
 **Interfaces:**
+
 - Produces: a running Expo project with `npm start` available; `app/(tabs)/_layout.tsx`, `app/(tabs)/index.tsx`, `app/(tabs)/two.tsx`, `app/_layout.tsx`, `app/modal.tsx`, `app/+not-found.tsx`, `components/Themed.tsx` (exports `Text`, `View`) — later tasks modify or remove these.
 
 - [ ] **Step 1: Generate the template into a scratch subdirectory**
@@ -84,24 +96,27 @@ git commit -m "Scaffold Expo Router app from the tabs template"
 ### Task 2: Add typecheck, ESLint, and Prettier
 
 **Files:**
+
 - Modify: `package.json` (add `typecheck`, `lint`, `format`, `format:check` scripts)
 - Create: `eslint.config.js`
 - Create: `.prettierrc.json`
 - Create: `.prettierignore`
 
 **Interfaces:**
+
 - Consumes: the scaffolded project from Task 1.
 - Produces: `npm run lint`, `npm run typecheck`, `npm run format:check` — used by Task 5's CI workflow.
 
 - [ ] **Step 1: Install tooling**
 
 ```bash
-npm install --save-dev eslint@10.7.0 eslint-config-expo@57.0.0 eslint-config-prettier@10.1.8 prettier@3.9.6
+npm install --save-dev eslint@9.39.5 eslint-config-expo@57.0.0 eslint-config-prettier@10.1.8 prettier@3.9.6
 ```
 
 - [ ] **Step 2: Create the ESLint flat config**
 
 `eslint.config.js`:
+
 ```js
 const expoConfig = require('eslint-config-expo/flat');
 const prettierConfig = require('eslint-config-prettier');
@@ -118,6 +133,7 @@ module.exports = [
 - [ ] **Step 3: Create the Prettier config**
 
 `.prettierrc.json`:
+
 ```json
 {
   "singleQuote": true,
@@ -127,6 +143,7 @@ module.exports = [
 ```
 
 `.prettierignore`:
+
 ```
 node_modules
 .expo
@@ -137,6 +154,7 @@ package-lock.json
 - [ ] **Step 4: Add scripts to `package.json`**
 
 Add to the `"scripts"` object (keep the existing `start`/`android`/`ios`/`web` entries):
+
 ```json
 "lint": "eslint .",
 "typecheck": "tsc --noEmit",
@@ -174,10 +192,12 @@ git commit -m "Add ESLint, Prettier, and typecheck tooling"
 ### Task 3: Add Jest and a wiring smoke test
 
 **Files:**
+
 - Modify: `package.json` (add `"test": "jest"` script and `"jest": { "preset": "jest-expo" }` config block)
 - Create: `components/__tests__/Themed-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `components/Themed.tsx`'s exported `Text` component (from the Task 1 scaffold; unchanged by this task).
 - Produces: `npm test` — used by Task 5's CI workflow and by Task 4's new test.
 
@@ -190,6 +210,7 @@ npm install --save-dev jest@30.4.2 jest-expo@57.0.2 @types/jest@30.0.0 @testing-
 - [ ] **Step 2: Add the Jest config and script to `package.json`**
 
 Add `"test": "jest"` to `"scripts"`, and add this top-level key to `package.json`:
+
 ```json
 "jest": {
   "preset": "jest-expo"
@@ -199,6 +220,7 @@ Add `"test": "jest"` to `"scripts"`, and add this top-level key to `package.json
 - [ ] **Step 3: Write the smoke test**
 
 `components/__tests__/Themed-test.tsx`:
+
 ```tsx
 import { render, screen } from '@testing-library/react-native';
 import { Text } from '../Themed';
@@ -229,6 +251,7 @@ git commit -m "Add Jest with jest-expo preset and a rendering smoke test"
 ### Task 4: Build the 5-tab navigation and the alert deep link route
 
 **Files:**
+
 - Modify: `app/(tabs)/_layout.tsx`
 - Modify: `app/(tabs)/index.tsx`
 - Create: `app/(tabs)/mapa.tsx`
@@ -245,6 +268,7 @@ git commit -m "Add Jest with jest-expo preset and a rendering smoke test"
 - Modify: `app.json` (add `"scheme": "sama"`)
 
 **Interfaces:**
+
 - Consumes: `components/Themed.tsx`'s `Text` and `View` (from Task 1, untouched).
 - Produces: the route `alerta/[id]` reachable at `sama://alerta/<id>`, rendering the given `id` — this is what a future push-notification deep link (F1/E4-04) will target.
 
@@ -257,6 +281,7 @@ rm app/\(tabs\)/two.tsx app/modal.tsx components/EditScreenInfo.tsx components/E
 - [ ] **Step 2: Rewrite the tab layout with SAMA's 5 tabs**
 
 `app/(tabs)/_layout.tsx`:
+
 ```tsx
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
@@ -276,35 +301,45 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Inicio',
-          tabBarIcon: ({ color }) => <FontAwesome size={24} name="home" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="home" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="mapa"
         options={{
           title: 'Mapa',
-          tabBarIcon: ({ color }) => <FontAwesome size={24} name="map" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="map" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="alertas"
         options={{
           title: 'Alertas',
-          tabBarIcon: ({ color }) => <FontAwesome size={24} name="bell" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="bell" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="que-hago"
         options={{
           title: '¿Qué hago?',
-          tabBarIcon: ({ color }) => <FontAwesome size={24} name="question-circle" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="question-circle" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="reportar"
         options={{
           title: 'Reportar',
-          tabBarIcon: ({ color }) => <FontAwesome size={24} name="paper-plane" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="paper-plane" color={color} />
+          ),
         }}
       />
     </Tabs>
@@ -315,6 +350,7 @@ export default function TabLayout() {
 - [ ] **Step 3: Replace the Inicio screen**
 
 `app/(tabs)/index.tsx`:
+
 ```tsx
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
@@ -344,6 +380,7 @@ const styles = StyleSheet.create({
 - [ ] **Step 4: Create the remaining 4 tab placeholder screens**
 
 `app/(tabs)/mapa.tsx`:
+
 ```tsx
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
@@ -363,6 +400,7 @@ const styles = StyleSheet.create({
 ```
 
 `app/(tabs)/alertas.tsx`:
+
 ```tsx
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
@@ -382,6 +420,7 @@ const styles = StyleSheet.create({
 ```
 
 `app/(tabs)/que-hago.tsx`:
+
 ```tsx
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
@@ -401,6 +440,7 @@ const styles = StyleSheet.create({
 ```
 
 `app/(tabs)/reportar.tsx`:
+
 ```tsx
 import { StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
@@ -422,6 +462,7 @@ const styles = StyleSheet.create({
 - [ ] **Step 5: Create the alert detail route**
 
 `app/alerta/[id].tsx`:
+
 ```tsx
 import { StyleSheet } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
@@ -446,6 +487,7 @@ const styles = StyleSheet.create({
 - [ ] **Step 6: Wire the route into the root stack**
 
 Edit `app/_layout.tsx`: find the `Stack.Screen name="modal"` entry (it will look like `<Stack.Screen name="modal" options={{ presentation: 'modal' }} />`) and replace it with:
+
 ```tsx
 <Stack.Screen name="alerta/[id]" options={{ title: 'Detalle de alerta' }} />
 ```
@@ -453,6 +495,7 @@ Edit `app/_layout.tsx`: find the `Stack.Screen name="modal"` entry (it will look
 - [ ] **Step 7: Add the URL scheme**
 
 Edit `app.json`: inside the top-level `"expo"` object, add:
+
 ```json
 "scheme": "sama",
 ```
@@ -460,6 +503,7 @@ Edit `app.json`: inside the top-level `"expo"` object, add:
 - [ ] **Step 8: Write the failing test for the alert detail screen**
 
 `app/alerta/__tests__/id-test.tsx`:
+
 ```tsx
 import { render, screen } from '@testing-library/react-native';
 import AlertaDetailScreen from '../[id]';
@@ -504,15 +548,18 @@ git commit -m "Add SAMA 5-tab navigation and alerta/[id] deep link route"
 ### Task 5: GitHub Actions CI, pushed and verified on a real PR
 
 **Files:**
+
 - Create: `.github/workflows/ci.yml`
 
 **Interfaces:**
+
 - Consumes: `npm run lint`, `npm run typecheck`, `npm test`, `npx expo-doctor` (all from Tasks 2–4).
 - Produces: a GitHub Actions status check named `build` on every PR against `main`.
 
 - [ ] **Step 1: Write the workflow**
 
 `.github/workflows/ci.yml`:
+
 ```yaml
 name: CI
 
@@ -567,11 +614,13 @@ Expected: the `build` check finishes with ✓ (success). If it fails, read the f
 ### Task 6: ADR-0001 — repos separados app/BFF
 
 **Files:**
+
 - Create: `docs/adr/0001-repos-separados-app-bff.md`
 
 - [ ] **Step 1: Write the ADR**
 
 `docs/adr/0001-repos-separados-app-bff.md`:
+
 ```markdown
 # ADR-0001: Repos separados para la app y el BFF
 
@@ -623,12 +672,14 @@ git commit -m "Document ADR-0001: separate repos for app and BFF"
 ### Task 7: Spec template and Definition of Done
 
 **Files:**
+
 - Create: `docs/specs/TEMPLATE.md`
 - Create: `docs/DEFINITION_OF_DONE.md`
 
 - [ ] **Step 1: Write the spec template**
 
 `docs/specs/TEMPLATE.md`:
+
 ```markdown
 # Spec — <nombre del ticket>
 
@@ -675,6 +726,7 @@ según escala en la guía de metodología).>
 - [ ] **Step 2: Write the Definition of Done**
 
 `docs/DEFINITION_OF_DONE.md`:
+
 ```markdown
 # Definition of Done
 
@@ -688,7 +740,7 @@ entregado (adaptado de la guía de metodología del proyecto, Parte VIII y XIII)
       verificado con una prueba automática real.
 - [ ] Los fallos, si los hubo durante el desarrollo, se reportaron con su salida real
       — nunca "debería funcionar".
-- [ ] Las decisiones y *gotchas* no obvios quedaron registrados (ADR si es una decisión
+- [ ] Las decisiones y _gotchas_ no obvios quedaron registrados (ADR si es una decisión
       de arquitectura; comentario si es un detalle puntual).
 - [ ] La spec quedó actualizada si se aprendió algo que la cambia.
 - [ ] El ticket se cerró con detalle suficiente para que alguien externo entienda
@@ -709,11 +761,13 @@ git commit -m "Add spec template and Definition of Done"
 ### Task 8: CLAUDE.md
 
 **Files:**
+
 - Create: `CLAUDE.md`
 
 - [ ] **Step 1: Write CLAUDE.md**
 
 `CLAUDE.md`:
+
 ```markdown
 # CLAUDE.md
 
@@ -808,6 +862,7 @@ git commit -m "Add CLAUDE.md for the project's spec-driven development cycle"
 ### Task 9: README
 
 **Files:**
+
 - Modify: `README.md`
 
 **Interfaces:** none (documentation only).
@@ -828,7 +883,8 @@ in Tasks 6 and 8), not writing it from scratch.
 - [ ] **Step 1: Replace the README**
 
 `README.md`:
-```markdown
+
+````markdown
 # SAMA Mobile
 
 **Alertas de riesgo hidrometeorológico para el territorio antioqueño, directo al bolsillo de cada ciudadano.**
@@ -845,7 +901,7 @@ La propuesta completa (contexto, alcance, arquitectura, cronograma) está en [`d
 
 ## Sobre este proyecto
 
-Propuesta técnica y de producto, arquitectura y backlog diseñados por **Sergio Monsalve**. El desarrollo del MVP sigue una disciplina de *spec-driven development* asistido por agentes de IA: cada cambio parte de una spec versionada con criterios de aceptación, pasa por un plan aprobado antes de tocar código, se entrega en incrementos pequeños y se verifica de verdad (no solo "compila"). El ciclo completo y sus convenciones están en [`CLAUDE.md`](CLAUDE.md) y en [`docs/specs/`](docs/specs/).
+Propuesta técnica y de producto, arquitectura y backlog diseñados por **Sergio Monsalve**. El desarrollo del MVP sigue una disciplina de _spec-driven development_ asistido por agentes de IA: cada cambio parte de una spec versionada con criterios de aceptación, pasa por un plan aprobado antes de tocar código, se entrega en incrementos pequeños y se verifica de verdad (no solo "compila"). El ciclo completo y sus convenciones están en [`CLAUDE.md`](CLAUDE.md) y en [`docs/specs/`](docs/specs/).
 
 ## Alcance del MVP
 
@@ -874,6 +930,7 @@ En construcción del harness inicial (esqueleto de la app, tooling, CI, convenci
 npm install
 npm start          # abre el menú de Expo: presiona i (iOS), a (Android) o w (web)
 ```
+````
 
 Otros comandos:
 
@@ -892,13 +949,14 @@ npm run format      # Prettier (escribe cambios)
 - `docs/adr/` — decisiones de arquitectura documentadas.
 - `docs/DEFINITION_OF_DONE.md` — checklist de cierre para cualquier ticket.
 - `CLAUDE.md` — el ciclo de desarrollo y las convenciones del repo, para humanos y agentes de IA.
-```
+
+````
 
 - [ ] **Step 2: Verify the CI badge URL matches the actual workflow path**
 
 ```bash
 cat .github/workflows/ci.yml | head -1
-```
+````
 
 Expected: confirms the workflow file exists at `.github/workflows/ci.yml`, matching the badge URL's `.../workflows/ci.yml/badge.svg` path.
 

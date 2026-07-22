@@ -1,4 +1,5 @@
 # Propuesta de MVP — Aplicación móvil SAMA
+
 ## Sistema de Alerta y Monitoreo de Antioquia en el bolsillo de cada antioqueño
 
 **Preparada para:** Dagran — Departamento Administrativo de Gestión del Riesgo de Desastres de Antioquia
@@ -18,13 +19,13 @@ En una emergencia por creciente súbita, los minutos cuentan y **la información
 
 **Parámetros generales propuestos** (detallados en las secciones 6 y 7):
 
-| Parámetro | Propuesta |
-|---|---|
-| Plataformas | Android + iOS desde una sola base de código (React Native) |
-| Duración del MVP | 16 semanas (4 fases) |
-| Equipo | 3–4 personas (núcleo pequeño y senior) |
-| Inversión estimada | COP $170M – $230M (rango, ver sección 7) |
-| Piloto sugerido | 3 municipios con instrumentación madura (p. ej. Zaragoza, Carepa, Turbo) |
+| Parámetro          | Propuesta                                                                |
+| ------------------ | ------------------------------------------------------------------------ |
+| Plataformas        | Android + iOS desde una sola base de código (React Native)               |
+| Duración del MVP   | 16 semanas (4 fases)                                                     |
+| Equipo             | 3–4 personas (núcleo pequeño y senior)                                   |
+| Inversión estimada | COP $170M – $230M (rango, ver sección 7)                                 |
+| Piloto sugerido    | 3 municipios con instrumentación madura (p. ej. Zaragoza, Carepa, Turbo) |
 
 ---
 
@@ -56,39 +57,44 @@ Principio rector: **hacer pocas cosas, que protejan vidas, y hacerlas muy bien.*
 ### 3.1 Funcionalidades incluidas (MVP)
 
 **F1. Alertas push georreferenciadas** — el corazón del MVP
+
 - Suscripción por municipio y/o cuenca (multi-selección: "mi casa", "la finca", "donde estudian mis hijos").
 - Opción de alertas por ubicación actual (geolocalización opt-in).
 - Niveles de alerta visualmente inequívocos (verde / amarilla / naranja / roja) con vibración y sonido diferenciado para alerta roja.
 - Historial de alertas recibidas.
 
 **F2. Mapa de estaciones en tiempo real**
+
 - Mapa del departamento con las estaciones SAMA (pluviómetros, sensores de nivel, cámaras).
 - Detalle por estación: última lectura, tendencia de las últimas 24–72 h (gráfica simple), estado del sensor.
 - Filtros por tipo de estación y por cuenca.
 
 **F3. "¿Qué hago?" — módulo de recomendaciones**
+
 - Contenido offline (empaquetado en la app) de preparación y respuesta: antes / durante / después, por tipo de evento (inundación, creciente súbita, avenida torrencial).
 - Directorio de emergencia por municipio: líneas del consejo municipal de gestión del riesgo, bomberos, defensa civil.
 - Puntos de encuentro por municipio piloto (cargados con el Dagran durante la fase de contenido).
 
 **F4. Reporte ciudadano (versión mínima)**
+
 - Formulario simple: foto + ubicación + categoría (nivel del río, deslizamiento, obstrucción de cauce) + descripción corta.
 - Los reportes llegan a un panel interno básico para el equipo Dagran (moderación y verificación manual).
 - Este módulo siembra la doble vía sin comprometer el alcance: en el MVP no hay publicación pública de reportes.
 
 **F5. Fundamentos transversales**
+
 - Funcionamiento con conectividad intermitente: última información conocida cacheada con marca de tiempo visible ("datos de hace 35 min").
 - Accesibilidad: textos grandes, alto contraste, lenguaje claro (nivel de lectura general), compatibilidad con lectores de pantalla.
 - Analítica de uso anónima para medir el piloto (aperturas de alerta, tiempo hasta apertura).
 
 ### 3.2 Usuarios y casos de uso principales
 
-| Usuario | Caso de uso | Funcionalidad |
-|---|---|---|
-| Habitante de zona ribereña | Recibir alerta roja a las 2 a. m. y saber si evacuar | F1 + F3 |
-| Líder comunitario capacitado por SAMA | Monitorear la quebrada de su vereda y reportar lo que ve | F2 + F4 |
-| Consejo municipal de gestión del riesgo | Verificar reportes ciudadanos y estado de sensores | F2 + panel de F4 |
-| Familiar en Medellín | Seguir la situación del municipio donde vive su familia | F1 (multi-municipio) + F2 |
+| Usuario                                 | Caso de uso                                              | Funcionalidad             |
+| --------------------------------------- | -------------------------------------------------------- | ------------------------- |
+| Habitante de zona ribereña              | Recibir alerta roja a las 2 a. m. y saber si evacuar     | F1 + F3                   |
+| Líder comunitario capacitado por SAMA   | Monitorear la quebrada de su vereda y reportar lo que ve | F2 + F4                   |
+| Consejo municipal de gestión del riesgo | Verificar reportes ciudadanos y estado de sensores       | F2 + panel de F4          |
+| Familiar en Medellín                    | Seguir la situación del municipio donde vive su familia  | F1 (multi-municipio) + F2 |
 
 ### 3.3 Explícitamente fuera del MVP (candidatos a fase 2)
 
@@ -195,18 +201,19 @@ Fase 3                                            ██ ██ ██ ██
 ```
 
 **Fase 0 — Descubrimiento y validación técnica (semanas 1–2)**
-Talleres con Dagran/G-LIMA; inventario y prueba real de las fuentes de datos (servicios ArcGIS, feed de alertas); prototipo Figma validado; definición del protocolo de niveles de alerta en la app; acta de alcance cerrado. *Entregable: documento de arquitectura validada + prototipo + backlog priorizado definitivo.*
+Talleres con Dagran/G-LIMA; inventario y prueba real de las fuentes de datos (servicios ArcGIS, feed de alertas); prototipo Figma validado; definición del protocolo de niveles de alerta en la app; acta de alcance cerrado. _Entregable: documento de arquitectura validada + prototipo + backlog priorizado definitivo._
 
 **Fase 1 — Núcleo de la app (semanas 3–8)**
-BFF con integración de estaciones; app con mapa en tiempo real, detalle de estación con gráficas, módulo "¿Qué hago?" offline y estructura de navegación. *Entregable: build interna (TestFlight / APK) con F2 y F3 funcionales sobre datos reales.*
+BFF con integración de estaciones; app con mapa en tiempo real, detalle de estación con gráficas, módulo "¿Qué hago?" offline y estructura de navegación. _Entregable: build interna (TestFlight / APK) con F2 y F3 funcionales sobre datos reales._
 
 **Fase 2 — Alertas push y reporte ciudadano (semanas 9–12)**
-Motor de suscripciones, integración del feed de alertas, despacho FCM/APNs, pantallas de alerta, historial; formulario de reporte ciudadano y panel admin básico. *Entregable: build candidata con F1 y F4 completas; prueba de carga de despacho de notificaciones.*
+Motor de suscripciones, integración del feed de alertas, despacho FCM/APNs, pantallas de alerta, historial; formulario de reporte ciudadano y panel admin básico. _Entregable: build candidata con F1 y F4 completas; prueba de carga de despacho de notificaciones._
 
 **Fase 3 — Piloto, endurecimiento y publicación (semanas 13–16)**
-Piloto cerrado en 3 municipios con líderes comunitarios (aprovechando la red social ya construida por el SAMA); corrección sobre retroalimentación real; pruebas de campo con conectividad limitada; publicación en Google Play y App Store; entrega de documentación y transferencia de conocimiento al Dagran. *Entregable: app publicada + informe de piloto con métricas + manual de operación.*
+Piloto cerrado en 3 municipios con líderes comunitarios (aprovechando la red social ya construida por el SAMA); corrección sobre retroalimentación real; pruebas de campo con conectividad limitada; publicación en Google Play y App Store; entrega de documentación y transferencia de conocimiento al Dagran. _Entregable: app publicada + informe de piloto con métricas + manual de operación._
 
 **Criterios de éxito del MVP (medibles en el piloto)**
+
 - ≥ 80% de las alertas emitidas llegan al dispositivo en < 60 s.
 - ≥ 50% de usuarios del piloto abren la alerta en < 10 min.
 - App funcional (última información cacheada) sin conectividad.
@@ -219,23 +226,23 @@ Piloto cerrado en 3 municipios con líderes comunitarios (aprovechando la red so
 
 ### 7.1 Equipo propuesto (núcleo pequeño y senior)
 
-| Rol | Dedicación | Duración |
-|---|---|---|
-| Líder técnico / desarrollador React Native senior | 100% | 16 semanas |
-| Desarrollador backend (Node.js/PostGIS) | 100% | 14 semanas |
-| Desarrollador React Native | 100% | 12 semanas (fases 1–3) |
-| Diseñador UX/UI | 50% | 8 semanas (concentrado en fases 0–1) |
-| QA / pruebas de campo | 50% | 8 semanas (fases 2–3) |
+| Rol                                               | Dedicación | Duración                             |
+| ------------------------------------------------- | ---------- | ------------------------------------ |
+| Líder técnico / desarrollador React Native senior | 100%       | 16 semanas                           |
+| Desarrollador backend (Node.js/PostGIS)           | 100%       | 14 semanas                           |
+| Desarrollador React Native                        | 100%       | 12 semanas (fases 1–3)               |
+| Diseñador UX/UI                                   | 50%        | 8 semanas (concentrado en fases 0–1) |
+| QA / pruebas de campo                             | 50%        | 8 semanas (fases 2–3)                |
 
 ### 7.2 Estimación de inversión (COP, orden de magnitud)
 
-| Concepto | Rango estimado |
-|---|---|
-| Equipo de desarrollo (según 7.1, tarifas mercado colombiano) | $150M – $200M |
-| Diseño UX/UI y validación con comunidad | $12M – $18M |
-| Infraestructura año 1 (nube BFF, base de datos, FCM, tiles de mapa) | $6M – $10M |
-| Cuentas de tiendas, certificados, herramientas (Figma, EAS, monitoreo) | $2M – $4M |
-| **Total MVP** | **$170M – $230M** |
+| Concepto                                                               | Rango estimado    |
+| ---------------------------------------------------------------------- | ----------------- |
+| Equipo de desarrollo (según 7.1, tarifas mercado colombiano)           | $150M – $200M     |
+| Diseño UX/UI y validación con comunidad                                | $12M – $18M       |
+| Infraestructura año 1 (nube BFF, base de datos, FCM, tiles de mapa)    | $6M – $10M        |
+| Cuentas de tiendas, certificados, herramientas (Figma, EAS, monitoreo) | $2M – $4M         |
+| **Total MVP**                                                          | **$170M – $230M** |
 
 Notas: (1) rangos ajustables según modalidad de contratación (equipo propio, freelance, mixto) y tarifas que se acuerden; (2) la infraestructura recurrente pos-MVP se estima en $500K – $900K/mes a escala de piloto; el costo de FCM/APNs es cero; (3) frente a la inversión ya realizada en instrumentación (miles de millones de pesos), el MVP representa la fracción que convierte esa infraestructura en protección directa al ciudadano.
 
@@ -255,4 +262,4 @@ Fase 2 (post-piloto): expansión a todos los municipios instrumentados; módulo 
 
 ---
 
-*Documento acompañado por el anexo **"Backlog del MVP — tickets detallados"** con las épicas, historias de usuario, criterios de aceptación y estimaciones que soportan el cronograma de la sección 6.*
+_Documento acompañado por el anexo **"Backlog del MVP — tickets detallados"** con las épicas, historias de usuario, criterios de aceptación y estimaciones que soportan el cronograma de la sección 6._

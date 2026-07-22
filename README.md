@@ -12,7 +12,7 @@ La propuesta completa (contexto, alcance, arquitectura, cronograma) está en [`d
 
 ## Sobre este proyecto
 
-Propuesta técnica y de producto, arquitectura y backlog diseñados por **Sergio Monsalve**. El desarrollo del MVP sigue una disciplina de *spec-driven development* asistido por agentes de IA: cada cambio parte de una spec versionada con criterios de aceptación, pasa por un plan aprobado antes de tocar código, se entrega en incrementos pequeños y se verifica de verdad (no solo "compila"). Ver [`docs/specs/`](docs/specs/) para la spec del ciclo en curso.
+Propuesta técnica y de producto, arquitectura y backlog diseñados por **Sergio Monsalve**. El desarrollo del MVP sigue una disciplina de _spec-driven development_ asistido por agentes de IA: cada cambio parte de una spec versionada con criterios de aceptación, pasa por un plan aprobado antes de tocar código, se entrega en incrementos pequeños y se verifica de verdad (no solo "compila"). Ver [`docs/specs/`](docs/specs/) para la spec del ciclo en curso.
 
 ## Alcance del MVP
 

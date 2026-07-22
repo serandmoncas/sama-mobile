@@ -19,6 +19,7 @@ Se evaluó monorepo (app + BFF NestJS juntos, como sugiere el backlog original) 
 ## Alcance de este ciclo
 
 ### Incluye
+
 1. Esqueleto de la app Expo + TypeScript con Expo Router (5 tabs + ruta de detalle de alerta para deep linking).
 2. Tooling: ESLint + Prettier (config Expo), TypeScript estricto, Jest + React Native Testing Library.
 3. CI en GitHub Actions: lint, typecheck, test, `expo-doctor` en cada PR.
@@ -28,6 +29,7 @@ Se evaluó monorepo (app + BFF NestJS juntos, como sugiere el backlog original) 
 7. **(Añadido 2026-07-22, tras aprobar el diseño original)** `README.md` real, con doble propósito: onboarding técnico (qué es, cómo correrlo, dónde están los docs) y pieza de portafolio profesional. El cliente (Dagran/Gobernación de Antioquia) se nombra explícitamente; las cifras de presupuesto/inversión de la propuesta **no** se incluyen en el README público — decisión explícita del autor dado que el repo es público.
 
 ### Explícitamente fuera de este ciclo (no-objetivos)
+
 - Cualquier pantalla con lógica real: mapa, alertas push, contenido offline, reporte ciudadano (F1–F5).
 - El BFF NestJS (repo aparte, futuro).
 - Integración con MapLibre, Firebase/APNs, SQLite/MMKV.
@@ -36,14 +38,14 @@ Se evaluó monorepo (app + BFF NestJS juntos, como sugiere el backlog original) 
 
 ## Stack técnico
 
-| Decisión | Elección | Razón |
-|---|---|---|
-| Framework | Expo (managed) + TypeScript estricto | OTA updates (EAS Update), builds reproducibles (EAS Build), es el estándar actual |
-| Navegación | Expo Router | Deep linking y rutas tipadas sin configuración manual; requisito explícito de E1-01 (abrir detalle de alerta desde push) |
-| Gestor de paquetes | npm | Ya instalado en el entorno, cero fricción adicional (KISS) |
-| Lint/format | ESLint (config oficial Expo) + Prettier | Estándar del ecosistema Expo |
-| Testing unitario | Jest + React Native Testing Library | Estándar del ecosistema RN |
-| CI | GitHub Actions | Remoto ya existe en `github.com/serandmoncas/sama-mobile` |
+| Decisión                  | Elección                                          | Razón                                                                                                                                     |
+| ------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework                 | Expo (managed) + TypeScript estricto              | OTA updates (EAS Update), builds reproducibles (EAS Build), es el estándar actual                                                         |
+| Navegación                | Expo Router                                       | Deep linking y rutas tipadas sin configuración manual; requisito explícito de E1-01 (abrir detalle de alerta desde push)                  |
+| Gestor de paquetes        | npm                                               | Ya instalado en el entorno, cero fricción adicional (KISS)                                                                                |
+| Lint/format               | ESLint (config oficial Expo) + Prettier           | Estándar del ecosistema Expo                                                                                                              |
+| Testing unitario          | Jest + React Native Testing Library               | Estándar del ecosistema RN                                                                                                                |
+| CI                        | GitHub Actions                                    | Remoto ya existe en `github.com/serandmoncas/sama-mobile`                                                                                 |
 | Tracking de tickets/specs | Markdown versionado en `docs/` (no GitHub Issues) | Alineado con "la spec es fuente de verdad, vive en archivo versionado" de la guía; los agentes de IA la leen directamente sin API externa |
 
 ## Estructura del repositorio

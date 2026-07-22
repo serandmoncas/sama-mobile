@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react';
 export function useClientOnlyValue<S, C>(server: S, client: C): S | C {
   const [value, setValue] = useState<S | C>(server);
   useEffect(() => {
+    // Intentional: this is the standard client/server hydration guard
+    // pattern (avoids UI mismatches between the server-rendered value and
+    // the client-only value), not a synchronization anti-pattern.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setValue(client);
   }, [client]);
 

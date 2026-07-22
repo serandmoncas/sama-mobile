@@ -818,6 +818,13 @@ description of the project. Per the author's explicit decision (the repo is publ
 name the client (Dagran / Gobernación de Antioquia) but **do not** include the
 proposal's budget/investment figures.
 
+**Note:** a lightweight version of this README (same framing, but without the CI
+badge, the `CLAUDE.md`/ADR links, or run commands — none of those existed yet) was
+already written and pushed to `main` on 2026-07-22 at the user's request, ahead of
+Tasks 1–8. This step is now about **expanding** that README to the full version
+below (which adds the CI badge and links to `CLAUDE.md` and the ADR, both created
+in Tasks 6 and 8), not writing it from scratch.
+
 - [ ] **Step 1: Replace the README**
 
 `README.md`:

@@ -278,8 +278,19 @@ git commit -m "Add Jest with jest-expo preset and a rendering smoke test"
 
 ### Task 4: Build the 5-tab navigation and the alert deep link route
 
+> **Correction (2026-07-22, caught before dispatch):** this task's tab layout uses
+> `@expo/vector-icons/FontAwesome` for tab icons, but that package is **not**
+> installed in the scaffold — confirmed absent from both `package.json` and
+> `node_modules`, and not a transitive dependency of `expo` in SDK 57 (the
+> scaffold's own icons use `expo-symbols`' `SymbolView` instead, which requires
+> per-platform SF-Symbol/Android/web icon names with no verified-correct set on
+> hand for 5 new tabs). `@expo/vector-icons` is added explicitly as Step 1 below,
+> via `npx expo install` so the SDK picks the compatible version rather than a
+> hand-guessed pin.
+
 **Files:**
 
+- Modify: `package.json`, `package-lock.json` (add `@expo/vector-icons`)
 - Modify: `app/(tabs)/_layout.tsx`
 - Modify: `app/(tabs)/index.tsx`
 - Create: `app/(tabs)/mapa.tsx`
@@ -300,13 +311,21 @@ git commit -m "Add Jest with jest-expo preset and a rendering smoke test"
 - Consumes: `components/Themed.tsx`'s `Text` and `View` (from Task 1, untouched).
 - Produces: the route `alerta/[id]` reachable at `sama://alerta/<id>`, rendering the given `id` — this is what a future push-notification deep link (F1/E4-04) will target.
 
-- [ ] **Step 1: Remove the template's placeholder screens**
+- [ ] **Step 1: Install the icon package**
+
+```bash
+npx expo install @expo/vector-icons
+```
+
+Expected: adds `@expo/vector-icons` to `package.json` dependencies at the SDK 57-compatible version and updates `package-lock.json`.
+
+- [ ] **Step 2: Remove the template's placeholder screens**
 
 ```bash
 rm app/\(tabs\)/two.tsx app/modal.tsx components/EditScreenInfo.tsx components/ExternalLink.tsx
 ```
 
-- [ ] **Step 2: Rewrite the tab layout with SAMA's 5 tabs**
+- [ ] **Step 3: Rewrite the tab layout with SAMA's 5 tabs**
 
 `app/(tabs)/_layout.tsx`:
 
@@ -375,7 +394,7 @@ export default function TabLayout() {
 }
 ```
 
-- [ ] **Step 3: Replace the Inicio screen**
+- [ ] **Step 4: Replace the Inicio screen**
 
 `app/(tabs)/index.tsx`:
 
@@ -405,7 +424,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-- [ ] **Step 4: Create the remaining 4 tab placeholder screens**
+- [ ] **Step 5: Create the remaining 4 tab placeholder screens**
 
 `app/(tabs)/mapa.tsx`:
 
@@ -487,7 +506,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-- [ ] **Step 5: Create the alert detail route**
+- [ ] **Step 6: Create the alert detail route**
 
 `app/alerta/[id].tsx`:
 
@@ -512,7 +531,7 @@ const styles = StyleSheet.create({
 });
 ```
 
-- [ ] **Step 6: Wire the route into the root stack**
+- [ ] **Step 7: Wire the route into the root stack**
 
 Edit `app/_layout.tsx`: find the `Stack.Screen name="modal"` entry (it will look like `<Stack.Screen name="modal" options={{ presentation: 'modal' }} />`) and replace it with:
 
@@ -520,7 +539,7 @@ Edit `app/_layout.tsx`: find the `Stack.Screen name="modal"` entry (it will look
 <Stack.Screen name="alerta/[id]" options={{ title: 'Detalle de alerta' }} />
 ```
 
-- [ ] **Step 7: Add the URL scheme**
+- [ ] **Step 8: Add the URL scheme**
 
 Edit `app.json`: inside the top-level `"expo"` object, add:
 
@@ -528,7 +547,7 @@ Edit `app.json`: inside the top-level `"expo"` object, add:
 "scheme": "sama",
 ```
 
-- [ ] **Step 8: Write the failing test for the alert detail screen**
+- [ ] **Step 9: Write the failing test for the alert detail screen**
 
 `app/alerta/__tests__/id-test.tsx`:
 
@@ -546,15 +565,15 @@ test('muestra el id recibido por parámetro de ruta', async () => {
 });
 ```
 
-- [ ] **Step 9: Run the test to verify it fails first (file doesn't exist yet if done out of order) or passes (if Step 5 already created the screen)**
+- [ ] **Step 10: Run the test to verify it fails first (file doesn't exist yet if done out of order) or passes (if Step 6 already created the screen)**
 
 ```bash
 npx jest app/alerta/__tests__/id-test.tsx
 ```
 
-If Steps 1–7 were completed first, expected: PASS (1 test). If you're following strict red/green TDD, create the test before Step 5's screen file and confirm it fails with "Cannot find module '../[id]'" first, then create the screen and re-run to see it pass.
+If Steps 1–8 were completed first, expected: PASS (1 test). If you're following strict red/green TDD, create the test before Step 6's screen file and confirm it fails with "Cannot find module '../[id]'" first, then create the screen and re-run to see it pass.
 
-- [ ] **Step 10: Run the full test and typecheck suite**
+- [ ] **Step 11: Run the full test and typecheck suite**
 
 ```bash
 npm test -- --ci
@@ -564,7 +583,7 @@ npm run lint
 
 Expected: all green. `npm test` now reports 2 test suites (Themed + alerta id), both passing.
 
-- [ ] **Step 11: Commit**
+- [ ] **Step 12: Commit**
 
 ```bash
 git add -A

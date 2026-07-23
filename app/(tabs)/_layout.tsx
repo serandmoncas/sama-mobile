@@ -1,10 +1,7 @@
-import { SymbolView } from 'expo-symbols';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
-
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Tabs } from 'expo-router';
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -12,57 +9,51 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
+          title: 'Inicio',
           tabBarIcon: ({ color }) => (
-            <SymbolView
-              name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
-              }}
-              tintColor={color}
-              size={28}
-            />
-          ),
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable style={{ marginRight: 15 }}>
-                {({ pressed }) => (
-                  <SymbolView
-                    name={{ ios: 'info.circle', android: 'info', web: 'info' }}
-                    size={25}
-                    tintColor={Colors[colorScheme].text}
-                    style={{ opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+            <FontAwesome size={24} name="home" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="mapa"
         options={{
-          title: 'Tab Two',
+          title: 'Mapa',
           tabBarIcon: ({ color }) => (
-            <SymbolView
-              name={{
-                ios: 'chevron.left.forwardslash.chevron.right',
-                android: 'code',
-                web: 'code',
-              }}
-              tintColor={color}
-              size={28}
-            />
+            <FontAwesome size={24} name="map" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="alertas"
+        options={{
+          title: 'Alertas',
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="bell" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="que-hago"
+        options={{
+          title: '¿Qué hago?',
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="question-circle" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="reportar"
+        options={{
+          title: 'Reportar',
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="paper-plane" color={color} />
           ),
         }}
       />

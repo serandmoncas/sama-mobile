@@ -23,6 +23,7 @@ import {
 import { useLocalSearchParams } from 'expo-router';
 import MunicipiosScreen from '../municipios';
 import { getSelectedMunicipios } from '@/lib/onboarding';
+import { MUNICIPIOS } from '@/constants/Municipios';
 
 const mockedParams = useLocalSearchParams as jest.Mock;
 
@@ -122,4 +123,28 @@ test('el título tiene accessibilityRole header', async () => {
   await render(<MunicipiosScreen />);
   const header = screen.getByRole('header', { name: 'Elige tu municipio' });
   expect(header).toBeTruthy();
+});
+
+test('muestra los 28 municipios', async () => {
+  await render(<MunicipiosScreen />);
+  await waitFor(() => screen.getByText('Zaragoza'));
+  expect(MUNICIPIOS.length).toBe(28);
+  MUNICIPIOS.forEach((name) => {
+    expect(screen.getByText(name)).toBeTruthy();
+  });
+});
+
+test('los municipios sin cobertura confirmada muestran el aviso de cobertura', async () => {
+  await render(<MunicipiosScreen />);
+  await waitFor(() => screen.getByText('Zaragoza'));
+  expect(
+    within(screen.getByTestId('municipio-Zaragoza')).queryByText(
+      'Cobertura de estaciones aún no confirmada',
+    ),
+  ).toBeNull();
+  expect(
+    within(screen.getByTestId('municipio-Medellín')).getByText(
+      'Cobertura de estaciones aún no confirmada',
+    ),
+  ).toBeTruthy();
 });

@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Text, View } from '@/components/Themed';
 import { Button } from '@/components/Button';
 import { useColorScheme } from '@/components/useColorScheme';
-import { PILOT_MUNICIPIOS } from '@/constants/Municipios';
+import { MUNICIPIOS, tieneCoberturaConfirmada } from '@/constants/Municipios';
 import { getSelectedMunicipios, setSelectedMunicipios } from '@/lib/onboarding';
 import Colors from '@/constants/Colors';
 import Spacing from '@/constants/Spacing';
@@ -50,29 +50,39 @@ export default function MunicipiosScreen() {
       <Text style={styles.title} accessibilityRole="header">
         Elige tu municipio
       </Text>
-      {PILOT_MUNICIPIOS.map((name) => {
-        const isSelected = selected.includes(name);
-        return (
-          <Pressable
-            key={name}
-            testID={`municipio-${name}`}
-            onPress={() => toggle(name)}
-            accessibilityRole="checkbox"
-            accessibilityState={{ checked: isSelected }}
-            accessibilityLabel={`${name}, ${isSelected ? 'seleccionado' : 'no seleccionado'}`}
-            style={[
-              styles.row,
-              {
-                borderColor: colors.border,
-                backgroundColor: isSelected ? colors.surface : 'transparent',
-              },
-            ]}
-          >
-            <Text>{name}</Text>
-            <Text>{isSelected ? '✓' : ''}</Text>
-          </Pressable>
-        );
-      })}
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.list}>
+        {MUNICIPIOS.map((name) => {
+          const isSelected = selected.includes(name);
+          const coberturaConfirmada = tieneCoberturaConfirmada(name);
+          return (
+            <Pressable
+              key={name}
+              testID={`municipio-${name}`}
+              onPress={() => toggle(name)}
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: isSelected }}
+              accessibilityLabel={`${name}, ${isSelected ? 'seleccionado' : 'no seleccionado'}`}
+              style={[
+                styles.row,
+                {
+                  borderColor: colors.border,
+                  backgroundColor: isSelected ? colors.surface : 'transparent',
+                },
+              ]}
+            >
+              <View style={styles.rowText}>
+                <Text>{name}</Text>
+                {!coberturaConfirmada && (
+                  <Text style={styles.coverageNotice}>
+                    Cobertura de estaciones aún no confirmada
+                  </Text>
+                )}
+              </View>
+              <Text>{isSelected ? '✓' : ''}</Text>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
       <Button label="Continuar" onPress={handleContinue} />
     </View>
   );
@@ -87,6 +97,12 @@ const styles = StyleSheet.create({
   title: {
     ...Typography.title,
   },
+  scroll: {
+    flex: 1,
+  },
+  list: {
+    gap: Spacing.sm,
+  },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -95,6 +111,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     minHeight: 44,
+  },
+  rowText: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  coverageNotice: {
+    ...Typography.caption,
   },
   volver: {
     minHeight: 44,

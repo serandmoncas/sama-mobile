@@ -11,18 +11,21 @@ type TerritoryCardProps = {
   name: string;
   alertLevel: AlertLevel;
   onPress?: () => void;
+  testID?: string;
 };
 
 export function TerritoryCard({
   name,
   alertLevel,
   onPress,
+  testID,
 }: TerritoryCardProps) {
   const theme = useColorScheme();
   const colors = Colors[theme];
 
   return (
     <Pressable
+      testID={testID}
       onPress={onPress}
       accessibilityRole={onPress ? 'button' : undefined}
       style={[

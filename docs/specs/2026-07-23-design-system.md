@@ -26,7 +26,7 @@
 - [ ] CA4: `AlertLevelChip` muestra el color y el texto correctos para cada uno de los 4 niveles de alerta.
 - [ ] CA5: `TerritoryCard` renderiza el nombre del municipio recibido por prop y el `AlertLevelChip` correspondiente a su nivel de alerta.
 - [ ] CA6: `DataFreshnessBanner` recibida una fecha `lastUpdated`, muestra el texto relativo correcto en español: "hace instantes" (<1 min), "hace X min" (1–59 min), "hace X h" (≥60 min, redondeado a horas enteras).
-- [ ] CA7: los 4 componentes respetan el modo claro/oscuro del sistema (vía el mismo mecanismo que `components/Themed.tsx` ya usa).
+- [ ] CA7: `Button`, `TerritoryCard` y `DataFreshnessBanner` respetan el modo claro/oscuro del sistema (vía el mismo mecanismo que `components/Themed.tsx` ya usa). `AlertLevelChip` queda explícitamente fuera de este criterio: sus colores son semánticos y fijos por diseño (ver Conversación) — no cambian con el tema, igual que un semáforo real no cambia de color de día o de noche.
 - [ ] CA8: ningún componente de texto de este ciclo desactiva `allowFontScaling`.
 - [ ] CA9: existe una pantalla de catálogo (fuera de los tabs de navegación) que muestra los 4 componentes con al menos 2–3 variantes visibles cada uno.
 

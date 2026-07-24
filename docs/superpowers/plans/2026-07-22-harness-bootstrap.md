@@ -1072,3 +1072,22 @@ gh pr view --web
 ```
 
 Report to the user: PR URL, CI status, and the DoD checklist results. **Do not merge the PR** — that decision belongs to the user.
+
+> **Native verification, added 2026-07-23 (post-plan):** the user installed
+> full Xcode after this plan's execution finished, giving access to an iOS
+> simulator (none was available during the original run). Using it:
+>
+> - The 5 tabs were confirmed navigable natively (already separately confirmed
+>   via the web build at the time; simulator confirms the native runtime too).
+> - `app/alerta/[id].tsx` was confirmed to render correctly (`Alerta 42`) when
+>   reached via Expo Go's dev deep-link format
+>   (`exp://<ip>:8081/--/alerta/42`).
+> - The literal `sama://alerta/42` URL scheme still could **not** be tested:
+>   `xcrun simctl openurl <device> sama://alerta/42` fails
+>   (`LSApplicationWorkspaceErrorDomain` error 115) because Expo Go is a
+>   generic container app — custom URL schemes only get registered with the
+>   OS in a standalone native build (EAS Build or `expo prebuild` + Xcode),
+>   which is out of scope per this spec's no-objetivos. The route/param logic
+>   is now verified; only the OS-level scheme registration remains untested,
+>   and that requires a real build to test at all.
+>   See PR #1's updated body for the same summary.

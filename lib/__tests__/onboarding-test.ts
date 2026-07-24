@@ -4,8 +4,10 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
+  getNotificationsGranted,
   getOnboardingCompleted,
   getSelectedMunicipios,
+  setNotificationsGranted,
   setOnboardingCompleted,
   setSelectedMunicipios,
 } from '../onboarding';
@@ -30,4 +32,16 @@ test('getSelectedMunicipios es [] por defecto', async () => {
 test('setSelectedMunicipios persiste la lista', async () => {
   await setSelectedMunicipios(['Zaragoza', 'Turbo']);
   expect(await getSelectedMunicipios()).toEqual(['Zaragoza', 'Turbo']);
+});
+
+test('getNotificationsGranted es false por defecto', async () => {
+  expect(await getNotificationsGranted()).toBe(false);
+});
+
+test('setNotificationsGranted persiste el valor', async () => {
+  await setNotificationsGranted(true);
+  expect(await getNotificationsGranted()).toBe(true);
+
+  await setNotificationsGranted(false);
+  expect(await getNotificationsGranted()).toBe(false);
 });

@@ -20,7 +20,10 @@ import {
   waitFor,
 } from '@testing-library/react-native';
 import NotificacionesScreen from '../notificaciones';
-import { getOnboardingCompleted } from '@/lib/onboarding';
+import {
+  getNotificationsGranted,
+  getOnboardingCompleted,
+} from '@/lib/onboarding';
 
 const mockedRequest = Notifications.requestPermissionsAsync as jest.Mock;
 
@@ -35,6 +38,15 @@ test('Permitir pide el permiso real y completa el onboarding', async () => {
   await render(<NotificacionesScreen />);
   fireEvent.press(screen.getByText('Permitir'));
   await waitFor(() => expect(mockedRequest).toHaveBeenCalled());
+  await waitFor(() => expect(mockReplace).toHaveBeenCalledWith('/(tabs)'));
+  expect(await getOnboardingCompleted()).toBe(true);
+  expect(await getNotificationsGranted()).toBe(true);
+});
+
+test('Permitir completa el onboarding aunque el permiso falle', async () => {
+  mockedRequest.mockRejectedValue(new Error('denied'));
+  await render(<NotificacionesScreen />);
+  fireEvent.press(screen.getByText('Permitir'));
   await waitFor(() => expect(mockReplace).toHaveBeenCalledWith('/(tabs)'));
   expect(await getOnboardingCompleted()).toBe(true);
 });

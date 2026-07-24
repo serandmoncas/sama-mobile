@@ -3,7 +3,7 @@ import AlertColors, { type AlertLevel } from '@/constants/AlertColors';
 import Spacing from '@/constants/Spacing';
 import Typography from '@/constants/Typography';
 
-const LEVEL_LABELS: Record<AlertLevel, string> = {
+export const LEVEL_LABELS: Record<AlertLevel, string> = {
   verde: 'Verde',
   amarilla: 'Amarilla',
   naranja: 'Naranja',

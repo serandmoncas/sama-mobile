@@ -21,14 +21,14 @@
 
 ## Criterios de aceptación
 
-- [ ] CA1: la pantalla "¿Qué hago?" muestra un selector con los 3 tipos de evento (inundación, creciente súbita, avenida torrencial).
-- [ ] CA2: la pantalla muestra un selector de fase (Antes/Durante/Después).
-- [ ] CA3: al cargar la pantalla, hay un evento y una fase seleccionados por defecto (inundación / antes), y se muestra el contenido correspondiente.
-- [ ] CA4: cambiar el evento seleccionado actualiza el contenido mostrado a la combinación evento×fase correcta, sin perder la fase activa.
-- [ ] CA5: cambiar la fase seleccionada actualiza el contenido mostrado a la combinación evento×fase correcta, sin perder el evento activo.
-- [ ] CA6: todo el contenido es local (sin llamadas de red) — la pantalla funciona igual con el dispositivo en modo avión.
-- [ ] CA7: los botones de evento y de fase tienen `accessibilityRole="tab"`, `accessibilityState={{ selected }}` y un área tocable ≥ 44px.
-- [ ] CA8: el contenido de las 9 combinaciones evento×fase está presente pero marcado explícitamente como pendiente de validación (no se presenta como recomendación oficial verificada).
+- [x] CA1: la pantalla "¿Qué hago?" muestra un selector con los 3 tipos de evento (inundación, creciente súbita, avenida torrencial).
+- [x] CA2: la pantalla muestra un selector de fase (Antes/Durante/Después).
+- [x] CA3: al cargar la pantalla, hay un evento y una fase seleccionados por defecto (inundación / antes), y se muestra el contenido correspondiente.
+- [x] CA4: cambiar el evento seleccionado actualiza el contenido mostrado a la combinación evento×fase correcta, sin perder la fase activa.
+- [x] CA5: cambiar la fase seleccionada actualiza el contenido mostrado a la combinación evento×fase correcta, sin perder el evento activo.
+- [x] CA6: todo el contenido es local (sin llamadas de red) — la pantalla funciona igual con el dispositivo en modo avión.
+- [x] CA7: los botones de evento y de fase tienen `accessibilityRole="tab"`, `accessibilityState={{ selected }}` y un área tocable ≥ 44px.
+- [x] CA8: el contenido de las 9 combinaciones evento×fase está presente pero marcado explícitamente como pendiente de validación (no se presenta como recomendación oficial verificada).
 
 ## Restricciones
 

@@ -37,12 +37,20 @@ export default function QueHagoScreen() {
               style={[
                 styles.tab,
                 {
-                  borderColor: colors.border,
+                  borderColor: isSelected ? colors.tint : colors.border,
+                  borderWidth: isSelected ? 2 : 1,
                   backgroundColor: isSelected ? colors.surface : 'transparent',
                 },
               ]}
             >
-              <Text style={styles.tabLabel}>{item.label}</Text>
+              <Text
+                style={[
+                  styles.tabLabel,
+                  isSelected && { color: colors.tint, fontWeight: '700' },
+                ]}
+              >
+                {item.label}
+              </Text>
             </Pressable>
           );
         })}
@@ -60,12 +68,20 @@ export default function QueHagoScreen() {
               style={[
                 styles.tab,
                 {
-                  borderColor: colors.border,
+                  borderColor: isSelected ? colors.tint : colors.border,
+                  borderWidth: isSelected ? 2 : 1,
                   backgroundColor: isSelected ? colors.surface : 'transparent',
                 },
               ]}
             >
-              <Text style={styles.tabLabel}>{item.label}</Text>
+              <Text
+                style={[
+                  styles.tabLabel,
+                  isSelected && { color: colors.tint, fontWeight: '700' },
+                ]}
+              >
+                {item.label}
+              </Text>
             </Pressable>
           );
         })}

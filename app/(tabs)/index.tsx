@@ -47,7 +47,9 @@ export default function InicioScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title} accessibilityRole="header">Mis territorios</Text>
+      <Text style={styles.title} accessibilityRole="header">
+        Mis territorios
+      </Text>
       {municipios.length === 0 ? (
         <Text>Aún no has añadido ningún municipio.</Text>
       ) : (

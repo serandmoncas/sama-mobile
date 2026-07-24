@@ -47,7 +47,9 @@ export default function MunicipiosScreen() {
           <Text style={{ color: colors.tint }}>Volver</Text>
         </Pressable>
       )}
-      <Text style={styles.title} accessibilityRole="header">Elige tu municipio</Text>
+      <Text style={styles.title} accessibilityRole="header">
+        Elige tu municipio
+      </Text>
       {PILOT_MUNICIPIOS.map((name) => {
         const isSelected = selected.includes(name);
         return (

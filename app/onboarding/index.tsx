@@ -8,7 +8,9 @@ import Typography from '@/constants/Typography';
 export default function BienvenidaScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title} accessibilityRole="header">SAMA</Text>
+      <Text style={styles.title} accessibilityRole="header">
+        SAMA
+      </Text>
       <Text style={styles.subtitle}>
         Alertas de riesgo hidrometeorológico para tu municipio, directo a tu
         celular.

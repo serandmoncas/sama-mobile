@@ -26,6 +26,7 @@
 ### Task 1: Municipios touch targets and checkbox accessibility
 
 **Files:**
+
 - Modify: `app/onboarding/municipios.tsx`
 - Modify: `app/onboarding/__tests__/municipios-test.tsx`
 
@@ -81,39 +82,43 @@ Expected: the 3 new tests fail (no `minHeight`, no `accessibilityRole`/`accessib
 Edit `app/onboarding/municipios.tsx`. Replace the `isStandalone &&` block and the municipio-row `Pressable` with:
 
 ```tsx
-{isStandalone && (
-  <Pressable
-    onPress={() => router.back()}
-    accessibilityRole="button"
-    style={styles.volver}
-  >
-    <Text style={{ color: colors.tint }}>Volver</Text>
-  </Pressable>
-)}
-<Text style={styles.title}>Elige tu municipio</Text>
-{PILOT_MUNICIPIOS.map((name) => {
-  const isSelected = selected.includes(name);
-  return (
+{
+  isStandalone && (
     <Pressable
-      key={name}
-      testID={`municipio-${name}`}
-      onPress={() => toggle(name)}
-      accessibilityRole="checkbox"
-      accessibilityState={{ checked: isSelected }}
-      accessibilityLabel={`${name}, ${isSelected ? 'seleccionado' : 'no seleccionado'}`}
-      style={[
-        styles.row,
-        {
-          borderColor: colors.border,
-          backgroundColor: isSelected ? colors.surface : 'transparent',
-        },
-      ]}
+      onPress={() => router.back()}
+      accessibilityRole="button"
+      style={styles.volver}
     >
-      <Text>{name}</Text>
-      <Text>{isSelected ? '✓' : ''}</Text>
+      <Text style={{ color: colors.tint }}>Volver</Text>
     </Pressable>
   );
-})}
+}
+<Text style={styles.title}>Elige tu municipio</Text>;
+{
+  PILOT_MUNICIPIOS.map((name) => {
+    const isSelected = selected.includes(name);
+    return (
+      <Pressable
+        key={name}
+        testID={`municipio-${name}`}
+        onPress={() => toggle(name)}
+        accessibilityRole="checkbox"
+        accessibilityState={{ checked: isSelected }}
+        accessibilityLabel={`${name}, ${isSelected ? 'seleccionado' : 'no seleccionado'}`}
+        style={[
+          styles.row,
+          {
+            borderColor: colors.border,
+            backgroundColor: isSelected ? colors.surface : 'transparent',
+          },
+        ]}
+      >
+        <Text>{name}</Text>
+        <Text>{isSelected ? '✓' : ''}</Text>
+      </Pressable>
+    );
+  });
+}
 ```
 
 (Only the `Pressable` elements changed — the surrounding `return`, `Button`, and everything else in the file stays as-is.)
@@ -177,6 +182,7 @@ git commit -m "Add checkbox accessibility and 44px touch targets to municipios s
 ### Task 2: Header roles on all 8 screens
 
 **Files:**
+
 - Modify: `app/(tabs)/index.tsx`, `app/(tabs)/mapa.tsx`, `app/(tabs)/alertas.tsx`, `app/(tabs)/que-hago.tsx`, `app/(tabs)/reportar.tsx`
 - Modify: `app/onboarding/index.tsx`, `app/onboarding/municipios.tsx`, `app/onboarding/notificaciones.tsx`
 - Modify: `app/(tabs)/__tests__/index-test.tsx`, `app/onboarding/__tests__/index-test.tsx`, `app/onboarding/__tests__/municipios-test.tsx`, `app/onboarding/__tests__/notificaciones-test.tsx`
@@ -418,11 +424,13 @@ git commit -m "Add accessibilityRole=header to all 8 screen titles"
 ### Task 3: TerritoryCard combined accessibility label
 
 **Files:**
+
 - Modify: `components/AlertLevelChip.tsx` (export `LEVEL_LABELS` instead of keeping it private)
 - Modify: `components/TerritoryCard.tsx`
 - Modify: `components/__tests__/TerritoryCard-test.tsx`
 
 **Interfaces:**
+
 - Produces: `AlertLevelChip.tsx` now exports `LEVEL_LABELS: Record<AlertLevel, string>` alongside its existing default export — consumed by `TerritoryCard.tsx` so both components share one source of truth for level display names (DRY — no duplicated label mapping).
 
 - [ ] **Step 1: Write the failing test**

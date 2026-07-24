@@ -4,7 +4,9 @@ import { Text, View } from '@/components/Themed';
 export default function MapaScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mapa de estaciones</Text>
+      <Text style={styles.title} accessibilityRole="header">
+        Mapa de estaciones
+      </Text>
     </View>
   );
 }

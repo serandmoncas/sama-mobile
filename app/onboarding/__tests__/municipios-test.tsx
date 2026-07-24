@@ -117,3 +117,9 @@ test('Volver tiene accessibilityRole button y minHeight 44', async () => {
   const flatStyle = Object.assign({}, volver.props.style);
   expect(flatStyle.minHeight).toBe(44);
 });
+
+test('el título tiene accessibilityRole header', async () => {
+  await render(<MunicipiosScreen />);
+  const header = screen.getByRole('header', { name: 'Elige tu municipio' });
+  expect(header).toBeTruthy();
+});

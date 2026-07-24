@@ -15,3 +15,9 @@ test('Comenzar navega a la selección de municipios', async () => {
   fireEvent.press(screen.getByText('Comenzar'));
   expect(mockPush).toHaveBeenCalledWith('/onboarding/municipios');
 });
+
+test('el título tiene accessibilityRole header', async () => {
+  await render(<BienvenidaScreen />);
+  const header = screen.getByRole('header', { name: 'SAMA' });
+  expect(header).toBeTruthy();
+});

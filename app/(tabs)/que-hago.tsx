@@ -4,7 +4,9 @@ import { Text, View } from '@/components/Themed';
 export default function QueHagoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>¿Qué hago?</Text>
+      <Text style={styles.title} accessibilityRole="header">
+        ¿Qué hago?
+      </Text>
     </View>
   );
 }

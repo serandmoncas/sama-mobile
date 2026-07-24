@@ -781,9 +781,223 @@ git commit -m "Add design system catalog screen at /dev/design-system"
 
 ---
 
-### Task 7: Full verification
+### Task 7: Dark-mode verification tests
+
+> **Added 2026-07-23, during Task 8's manual device check.** The user tested on
+> a real phone via the web build (native Expo Go couldn't run this SDK 57
+> project — the App Store's current Expo Go client only supports SDK 54). Web
+> revealed that `components/useColorScheme.web.ts` — a **pre-existing file from
+> the Task 1 harness scaffold**, not something introduced by this plan —
+> hardcodes `return 'light'` unconditionally, with a comment explaining this
+> avoids SSR hydration mismatches. So CA7 (light/dark theme respected) could not
+> be visually verified on this device at all: not on web (intentionally stubbed
+> to always 'light') and not natively (Expo Go SDK mismatch). This task closes
+> that gap with real automated proof that `Button`, `TerritoryCard`, and
+> `DataFreshnessBanner` correctly branch on `useColorScheme()`'s return value —
+> independent of whether either platform's runtime color-scheme detection works
+> in this environment. The mocking pattern below was hand-verified working
+> before being written into this plan.
+
+**Files:**
+- Modify: `components/TerritoryCard.tsx` (add optional `testID` prop, forwarded to the root `Pressable` — needed for the test below to query the styled element)
+- Create: `components/__tests__/TerritoryCard-darkmode-test.tsx`
+- Create: `components/__tests__/Button-darkmode-test.tsx`
+- Create: `components/__tests__/DataFreshnessBanner-darkmode-test.tsx`
+
+**Interfaces:**
+- Consumes: `useColorScheme` (existing), `Colors` (Task 1), `Button`/`TerritoryCard`/`DataFreshnessBanner` (Tasks 2/4/5) — mocks `useColorScheme` per test file to control its return value.
+- Produces: no new runtime interface; `TerritoryCard`'s prop type gains `testID?: string`, forwarded to its `Pressable` — a non-breaking addition (existing callers, including the catalog screen, are unaffected since it's optional).
+
+- [ ] **Step 1: Add `testID` forwarding to `TerritoryCard`**
+
+Edit `components/TerritoryCard.tsx`: add `testID?: string;` to `TerritoryCardProps`, add `testID` to the destructured props, and pass it to the `Pressable`:
+
+```tsx
+type TerritoryCardProps = {
+  name: string;
+  alertLevel: AlertLevel;
+  onPress?: () => void;
+  testID?: string;
+};
+
+export function TerritoryCard({ name, alertLevel, onPress, testID }: TerritoryCardProps) {
+  const theme = useColorScheme();
+  const colors = Colors[theme];
+
+  return (
+    <Pressable
+      testID={testID}
+      onPress={onPress}
+      accessibilityRole={onPress ? 'button' : undefined}
+      style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+    >
+```
+
+(Only these lines change — the rest of the file, including `styles`, is untouched.)
+
+- [ ] **Step 2: Write the failing test for `TerritoryCard`**
+
+`components/__tests__/TerritoryCard-darkmode-test.tsx`:
+
+```tsx
+jest.mock('../useColorScheme', () => ({
+  useColorScheme: jest.fn(),
+}));
+
+import { render, screen } from '@testing-library/react-native';
+import { TerritoryCard } from '../TerritoryCard';
+import { useColorScheme } from '../useColorScheme';
+import Colors from '@/constants/Colors';
+
+const mockedUseColorScheme = useColorScheme as jest.Mock;
+
+test('usa los colores de Colors.dark cuando el tema es oscuro', async () => {
+  mockedUseColorScheme.mockReturnValue('dark');
+  await render(<TerritoryCard name="Zaragoza" alertLevel="roja" testID="card" />);
+  const flatStyle = Object.assign({}, ...screen.getByTestId('card').props.style);
+  expect(flatStyle.backgroundColor).toBe(Colors.dark.surface);
+  expect(flatStyle.borderColor).toBe(Colors.dark.border);
+});
+
+test('usa los colores de Colors.light cuando el tema es claro', async () => {
+  mockedUseColorScheme.mockReturnValue('light');
+  await render(<TerritoryCard name="Zaragoza" alertLevel="roja" testID="card" />);
+  const flatStyle = Object.assign({}, ...screen.getByTestId('card').props.style);
+  expect(flatStyle.backgroundColor).toBe(Colors.light.surface);
+  expect(flatStyle.borderColor).toBe(Colors.light.border);
+});
+```
+
+- [ ] **Step 3: Run to verify red, then green after Step 1**
+
+```bash
+npx jest components/__tests__/TerritoryCard-darkmode-test.tsx
+```
+
+If run before Step 1's `testID` prop exists, expected: FAIL (`getByTestId` finds nothing). After Step 1, expected: PASS, 2 tests.
+
+- [ ] **Step 4: Write and verify the `Button` dark-mode test**
+
+`components/__tests__/Button-darkmode-test.tsx`:
+
+```tsx
+jest.mock('../useColorScheme', () => ({
+  useColorScheme: jest.fn(),
+}));
+
+import { render, screen } from '@testing-library/react-native';
+import { Button } from '../Button';
+import { useColorScheme } from '../useColorScheme';
+import Colors from '@/constants/Colors';
+
+const mockedUseColorScheme = useColorScheme as jest.Mock;
+
+test('el botón primario usa colors.dark.tint como fondo en modo oscuro', async () => {
+  mockedUseColorScheme.mockReturnValue('dark');
+  await render(<Button label="Continuar" onPress={() => {}} />);
+  const flatStyle = Object.assign({}, ...screen.getByText('Continuar').parent!.props.style);
+  expect(flatStyle.backgroundColor).toBe(Colors.dark.tint);
+});
+
+test('el botón primario usa colors.light.tint como fondo en modo claro', async () => {
+  mockedUseColorScheme.mockReturnValue('light');
+  await render(<Button label="Continuar" onPress={() => {}} />);
+  const flatStyle = Object.assign({}, ...screen.getByText('Continuar').parent!.props.style);
+  expect(flatStyle.backgroundColor).toBe(Colors.light.tint);
+});
+```
+
+Run:
+
+```bash
+npx jest components/__tests__/Button-darkmode-test.tsx
+```
+
+Expected: PASS, 2 tests. (`Button` needs no source change — its `Pressable` is already the direct parent of the `Text`, so `screen.getByText(...).parent` reaches it without needing a `testID`.)
+
+- [ ] **Step 5: Write and verify the `DataFreshnessBanner` dark-mode test**
+
+`components/__tests__/DataFreshnessBanner-darkmode-test.tsx`:
+
+```tsx
+jest.mock('../useColorScheme', () => ({
+  useColorScheme: jest.fn(),
+}));
+
+import { render, screen } from '@testing-library/react-native';
+import { DataFreshnessBanner } from '../DataFreshnessBanner';
+import { useColorScheme } from '../useColorScheme';
+import Colors from '@/constants/Colors';
+
+const mockedUseColorScheme = useColorScheme as jest.Mock;
+
+test('el texto usa colors.dark.textSecondary en modo oscuro', async () => {
+  mockedUseColorScheme.mockReturnValue('dark');
+  const now = new Date('2026-07-23T12:00:00Z');
+  await render(<DataFreshnessBanner lastUpdated={now} now={now} />);
+  const flatStyle = Object.assign({}, ...screen.getByText('hace instantes').props.style);
+  expect(flatStyle.color).toBe(Colors.dark.textSecondary);
+});
+
+test('el texto usa colors.light.textSecondary en modo claro', async () => {
+  mockedUseColorScheme.mockReturnValue('light');
+  const now = new Date('2026-07-23T12:00:00Z');
+  await render(<DataFreshnessBanner lastUpdated={now} now={now} />);
+  const flatStyle = Object.assign({}, ...screen.getByText('hace instantes').props.style);
+  expect(flatStyle.color).toBe(Colors.light.textSecondary);
+});
+```
+
+Run:
+
+```bash
+npx jest components/__tests__/DataFreshnessBanner-darkmode-test.tsx
+```
+
+Expected: PASS, 2 tests.
+
+- [ ] **Step 6: Run the full chain**
+
+```bash
+npm run lint
+npm run typecheck
+npm run format:check
+npm test -- --ci
+```
+
+Expected: all exit 0. `npm test` now reports 10 test suites (7 from Tasks 1-6 + 3 new dark-mode files), 20 tests total.
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add -A
+git commit -m "Add dark-mode verification tests for Button, TerritoryCard, DataFreshnessBanner"
+```
+
+---
+
+### Task 8: Full verification
 
 **Files:** none (verification only; may produce fix commits if something fails)
+
+> **Steps 1-2 status as of 2026-07-23:** already performed manually (not via a
+> dispatched implementer) while this plan was being executed, because Step 2
+> genuinely needed a human with a physical phone.
+>
+> - **Step 1** ran clean once (found + fixed a real `react-hooks/purity` lint
+>   error in the catalog screen, commit `228113c`, plus `format:check` drift
+>   across all Task 1-6 source that no individual task had run `npm run format`
+>   for, commit `e402130`). Must be re-run after Task 7 lands (new test files).
+> - **Step 2** ran on the user's real phone via the web build (`npx expo start
+>   --web`), NOT Expo Go — the App Store's current Expo Go client only supports
+>   SDK 54, and this project is on SDK 57, so `exp://` scanning fails with an
+>   incompatibility error. The 5 tabs and catalog screen's 4 sections were
+>   confirmed visually correct. Dark-mode adaptation could NOT be verified this
+>   way: `components/useColorScheme.web.ts` (pre-existing from the Task 1
+>   harness scaffold) hardcodes `'light'` on web regardless of the OS setting,
+>   by design (documented SSR-hydration-mismatch avoidance). Task 7 closes that
+>   gap with automated tests instead of a device check, since neither web nor
+>   Expo Go could verify it here.
 
 - [ ] **Step 1: Run the full automated chain fresh**
 
@@ -796,23 +1010,16 @@ npm run format:check
 npm test -- --ci
 ```
 
-Expected: all exit 0. `npm test` reports 7 test suites total (2 from the harness + Button, AlertLevelChip, TerritoryCard, DataFreshnessBanner, design-system catalog = 5 new), all passing. If `format:check` fails, run `npm run format` and re-verify — do not hand-fix formatting.
+Expected: all exit 0. `npm test` reports 10 test suites total (2 from the harness + Button, AlertLevelChip, TerritoryCard, DataFreshnessBanner, design-system catalog, Button-darkmode, TerritoryCard-darkmode, DataFreshnessBanner-darkmode = 8 new), 20 tests, all passing.
 
-- [ ] **Step 2: Visual check on a real device (Expo Go)**
-
-```bash
-npm start
-```
-
-On your phone with Expo Go installed, scan the QR code, then navigate to `exp://<the-IP-shown-in-the-terminal>/--/dev/design-system` (open it as a link, e.g. from a notes app or browser on the same phone). Confirm: all 4 component sections render, the button's 3 states look distinct, all 4 alert chips show distinct colors with legible text, all 4 territory cards show a name + chip, and the 3 freshness banners show "hace instantes"/"hace 20 min"/"hace 3 h". Toggle the phone's system dark mode and reload to confirm the card/text colors adapt.
-
-Report the real result of this manual check — if something looks wrong (e.g., a color that doesn't render as expected, text that's clipped), fix it and re-verify before moving on.
-
-- [ ] **Step 3: Push and open the PR**
+- [ ] **Step 2: Push and open the PR**
 
 ```bash
 git push -u origin design-system
-gh pr create --title "Design system: tokens + Button/AlertLevelChip/TerritoryCard/DataFreshnessBanner" --body "Implements docs/specs/2026-07-23-design-system.md (E1-02). Targets harness/bootstrap, not main, since that branch's PR #1 is still open. Provisional tokens — see the spec's Conversación section for why, and docs/adr if this needs a formal ADR once E0-03's visual guide exists." --base harness/bootstrap
+gh pr create --title "Design system: tokens + Button/AlertLevelChip/TerritoryCard/DataFreshnessBanner" --body "Implements docs/specs/2026-07-23-design-system.md (E1-02). Targets harness/bootstrap, not main, since that branch's PR #1 is still open. Provisional tokens — see the spec's Conversación section for why, and docs/adr if this needs a formal ADR once E0-03's visual guide exists.
+
+## Pendiente antes de mergear
+Visual QA was done on a real phone via the web build (Expo Go can't run this SDK 57 project yet — the App Store client is on SDK 54). Dark-mode is covered by automated tests (Task 7) mocking useColorScheme, since neither the web build (components/useColorScheme.web.ts hardcodes light) nor Expo Go could verify it visually on-device here. Recommend a real native dark-mode check (simulator, EAS dev build, or once Expo Go catches up to SDK 57) before merging." --base harness/bootstrap
 gh pr checks --watch
 ```
 

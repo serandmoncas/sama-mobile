@@ -38,19 +38,21 @@
 
 ## Already verified before this plan (for context, not to redo)
 
-Every file and test in this plan was fully hand-implemented and verified end-to-end by the plan's author before being written here: `npm run lint` (0 errors), `npm run typecheck` (clean), `npm run format:check` (clean), `npm test -- --ci` (15 suites / 36 tests passing), AND all 3 onboarding screens plus the Inicio redirect were visually confirmed correct on a real iOS 26.3 simulator (via `xcrun simctl` deep links, since no synthetic-tap tool was available in that environment). The code below is that exact verified implementation — implementers should transcribe it precisely rather than reinvent it, and reviewers can trust the architecture is sound and focus on verifying the transcription and the *your* environment's test run, not re-litigating design choices.
+Every file and test in this plan was fully hand-implemented and verified end-to-end by the plan's author before being written here: `npm run lint` (0 errors), `npm run typecheck` (clean), `npm run format:check` (clean), `npm test -- --ci` (15 suites / 36 tests passing), AND all 3 onboarding screens plus the Inicio redirect were visually confirmed correct on a real iOS 26.3 simulator (via `xcrun simctl` deep links, since no synthetic-tap tool was available in that environment). The code below is that exact verified implementation — implementers should transcribe it precisely rather than reinvent it, and reviewers can trust the architecture is sound and focus on verifying the transcription and the _your_ environment's test run, not re-litigating design choices.
 
 ---
 
 ### Task 1: Dependencies, persistence layer, and municipio list
 
 **Files:**
+
 - Modify: `package.json`, `package-lock.json` (add `@react-native-async-storage/async-storage`, `expo-notifications`)
 - Create: `lib/onboarding.ts`
 - Create: `lib/__tests__/onboarding-test.ts`
 - Create: `constants/Municipios.ts`
 
 **Interfaces:**
+
 - Produces: `getOnboardingCompleted()`, `setOnboardingCompleted()`, `getSelectedMunicipios()`, `setSelectedMunicipios(string[])` (all async) — consumed by Tasks 2-5. `PILOT_MUNICIPIOS` (readonly string tuple) — consumed by Task 3.
 
 - [ ] **Step 1: Install dependencies**
@@ -184,11 +186,13 @@ git commit -m "Add onboarding persistence layer and pilot municipio list"
 ### Task 2: Onboarding route structure and Bienvenida screen
 
 **Files:**
+
 - Create: `app/onboarding/_layout.tsx`
 - Create: `app/onboarding/index.tsx`
 - Create: `app/onboarding/__tests__/index-test.tsx`
 
 **Interfaces:**
+
 - Produces: the route `/onboarding` (Bienvenida) — consumed by `(tabs)/index.tsx`'s redirect (Task 5). Navigates to `/onboarding/municipios` on "Comenzar" — consumed by Task 3's route.
 
 - [ ] **Step 1: Write the failing test**
@@ -317,10 +321,12 @@ git commit -m "Add onboarding route structure and Bienvenida screen"
 ### Task 3: Municipios selection screen
 
 **Files:**
+
 - Create: `app/onboarding/municipios.tsx`
 - Create: `app/onboarding/__tests__/municipios-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `PILOT_MUNICIPIOS` (Task 1), `getSelectedMunicipios`/`setSelectedMunicipios` (Task 1).
 - Produces: the route `/onboarding/municipios`, which accepts an optional `standalone` query param. When `standalone=true`, "Continuar" saves and calls `router.back()` instead of advancing — consumed by Task 5's "+ Añadir municipio" button.
 
@@ -401,10 +407,7 @@ test('en modo standalone, continuar guarda y vuelve atrás en vez de avanzar', a
 });
 
 test('en modo standalone, precarga la selección existente', async () => {
-  await AsyncStorage.setItem(
-    'selectedMunicipios',
-    JSON.stringify(['Carepa']),
-  );
+  await AsyncStorage.setItem('selectedMunicipios', JSON.stringify(['Carepa']));
   mockedParams.mockReturnValue({ standalone: 'true' });
   await render(<MunicipiosScreen />);
   await waitFor(() => {
@@ -442,10 +445,7 @@ import { Text, View } from '@/components/Themed';
 import { Button } from '@/components/Button';
 import { useColorScheme } from '@/components/useColorScheme';
 import { PILOT_MUNICIPIOS } from '@/constants/Municipios';
-import {
-  getSelectedMunicipios,
-  setSelectedMunicipios,
-} from '@/lib/onboarding';
+import { getSelectedMunicipios, setSelectedMunicipios } from '@/lib/onboarding';
 import Colors from '@/constants/Colors';
 import Spacing from '@/constants/Spacing';
 import Typography from '@/constants/Typography';
@@ -558,10 +558,12 @@ git commit -m "Add municipios selection screen"
 ### Task 4: Notificaciones screen
 
 **Files:**
+
 - Create: `app/onboarding/notificaciones.tsx`
 - Create: `app/onboarding/__tests__/notificaciones-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `setOnboardingCompleted` (Task 1), `expo-notifications`'s `requestPermissionsAsync`.
 - Produces: the route `/onboarding/notificaciones`, the terminal screen of the onboarding sequence — both paths (`Permitir`/`Ahora no`) call `router.replace('/(tabs)')`.
 
@@ -661,8 +663,8 @@ export default function NotificacionesScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Recibe alertas al instante</Text>
       <Text style={styles.body}>
-        Activa las notificaciones para enterarte apenas se emita una alerta
-        en tu municipio. Puedes cambiar esto después desde los ajustes de tu
+        Activa las notificaciones para enterarte apenas se emita una alerta en
+        tu municipio. Puedes cambiar esto después desde los ajustes de tu
         celular.
       </Text>
       <Button label="Permitir" onPress={handlePermitir} />
@@ -719,10 +721,12 @@ git commit -m "Add notificaciones screen with real permission request"
 ### Task 5: Update Inicio to gate on onboarding and show selected municipios
 
 **Files:**
+
 - Modify: `app/(tabs)/index.tsx`
 - Create: `app/(tabs)/__tests__/index-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `getOnboardingCompleted`/`getSelectedMunicipios` (Task 1), `TerritoryCard` (existing, from the design-system plan), `/onboarding` route (Task 2), `/onboarding/municipios` route (Task 3).
 - Produces: nothing new consumed by later tasks — this is the last feature task.
 

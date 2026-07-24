@@ -70,10 +70,7 @@ test('en modo standalone, continuar guarda y vuelve atrás en vez de avanzar', a
 });
 
 test('en modo standalone, precarga la selección existente', async () => {
-  await AsyncStorage.setItem(
-    'selectedMunicipios',
-    JSON.stringify(['Carepa']),
-  );
+  await AsyncStorage.setItem('selectedMunicipios', JSON.stringify(['Carepa']));
   mockedParams.mockReturnValue({ standalone: 'true' });
   await render(<MunicipiosScreen />);
   await waitFor(() => {

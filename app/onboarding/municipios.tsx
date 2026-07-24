@@ -5,10 +5,7 @@ import { Text, View } from '@/components/Themed';
 import { Button } from '@/components/Button';
 import { useColorScheme } from '@/components/useColorScheme';
 import { PILOT_MUNICIPIOS } from '@/constants/Municipios';
-import {
-  getSelectedMunicipios,
-  setSelectedMunicipios,
-} from '@/lib/onboarding';
+import { getSelectedMunicipios, setSelectedMunicipios } from '@/lib/onboarding';
 import Colors from '@/constants/Colors';
 import Spacing from '@/constants/Spacing';
 import Typography from '@/constants/Typography';

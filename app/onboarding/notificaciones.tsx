@@ -26,8 +26,8 @@ export default function NotificacionesScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Recibe alertas al instante</Text>
       <Text style={styles.body}>
-        Activa las notificaciones para enterarte apenas se emita una alerta
-        en tu municipio. Puedes cambiar esto después desde los ajustes de tu
+        Activa las notificaciones para enterarte apenas se emita una alerta en
+        tu municipio. Puedes cambiar esto después desde los ajustes de tu
         celular.
       </Text>
       <Button label="Permitir" onPress={handlePermitir} />

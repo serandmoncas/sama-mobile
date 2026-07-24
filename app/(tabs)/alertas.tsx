@@ -4,7 +4,9 @@ import { Text, View } from '@/components/Themed';
 export default function AlertasScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Historial de alertas</Text>
+      <Text style={styles.title} accessibilityRole="header">
+        Historial de alertas
+      </Text>
     </View>
   );
 }

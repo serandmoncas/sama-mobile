@@ -58,3 +58,11 @@ test('Ahora no completa el onboarding sin pedir el permiso', async () => {
   expect(mockedRequest).not.toHaveBeenCalled();
   expect(await getOnboardingCompleted()).toBe(true);
 });
+
+test('el título tiene accessibilityRole header', async () => {
+  await render(<NotificacionesScreen />);
+  const header = screen.getByRole('header', {
+    name: 'Recibe alertas al instante',
+  });
+  expect(header).toBeTruthy();
+});

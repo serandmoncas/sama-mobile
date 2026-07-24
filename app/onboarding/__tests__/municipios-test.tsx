@@ -86,3 +86,40 @@ test('en modo standalone, muestra un botón para volver sin guardar', async () =
   fireEvent.press(screen.getByText('Volver'));
   expect(mockBack).toHaveBeenCalled();
 });
+
+test('las filas de municipio declaran minHeight 44', async () => {
+  await render(<MunicipiosScreen />);
+  await waitFor(() => screen.getByText('Zaragoza'));
+  const row = screen.getByTestId('municipio-Zaragoza');
+  const flatStyle = Object.assign({}, ...row.props.style);
+  expect(flatStyle.minHeight).toBe(44);
+});
+
+test('las filas de municipio tienen role checkbox con estado y label correctos', async () => {
+  await render(<MunicipiosScreen />);
+  await waitFor(() => screen.getByText('Zaragoza'));
+  const unchecked = screen.getByLabelText('Zaragoza, no seleccionado');
+  expect(unchecked.props.accessibilityRole).toBe('checkbox');
+  expect(unchecked.props.accessibilityState).toEqual({ checked: false });
+
+  fireEvent.press(unchecked);
+  await waitFor(() => {
+    const checked = screen.getByLabelText('Zaragoza, seleccionado');
+    expect(checked.props.accessibilityState).toEqual({ checked: true });
+  });
+});
+
+test('Volver tiene accessibilityRole button y minHeight 44', async () => {
+  mockedParams.mockReturnValue({ standalone: 'true' });
+  await render(<MunicipiosScreen />);
+  await waitFor(() => screen.getByText('Volver'));
+  const volver = screen.getByRole('button', { name: 'Volver' });
+  const flatStyle = Object.assign({}, volver.props.style);
+  expect(flatStyle.minHeight).toBe(44);
+});
+
+test('el título tiene accessibilityRole header', async () => {
+  await render(<MunicipiosScreen />);
+  const header = screen.getByRole('header', { name: 'Elige tu municipio' });
+  expect(header).toBeTruthy();
+});

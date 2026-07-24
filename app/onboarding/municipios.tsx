@@ -39,11 +39,17 @@ export default function MunicipiosScreen() {
   return (
     <View style={styles.container}>
       {isStandalone && (
-        <Pressable onPress={() => router.back()}>
+        <Pressable
+          onPress={() => router.back()}
+          accessibilityRole="button"
+          style={styles.volver}
+        >
           <Text style={{ color: colors.tint }}>Volver</Text>
         </Pressable>
       )}
-      <Text style={styles.title}>Elige tu municipio</Text>
+      <Text style={styles.title} accessibilityRole="header">
+        Elige tu municipio
+      </Text>
       {PILOT_MUNICIPIOS.map((name) => {
         const isSelected = selected.includes(name);
         return (
@@ -51,6 +57,9 @@ export default function MunicipiosScreen() {
             key={name}
             testID={`municipio-${name}`}
             onPress={() => toggle(name)}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: isSelected }}
+            accessibilityLabel={`${name}, ${isSelected ? 'seleccionado' : 'no seleccionado'}`}
             style={[
               styles.row,
               {
@@ -85,5 +94,12 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
     borderWidth: 1,
     borderRadius: 8,
+    minHeight: 44,
+  },
+  volver: {
+    minHeight: 44,
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
+    paddingVertical: Spacing.sm,
   },
 });

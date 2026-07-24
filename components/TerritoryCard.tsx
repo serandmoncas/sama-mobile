@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { useColorScheme } from './useColorScheme';
 import { Text } from './Themed';
-import { AlertLevelChip } from './AlertLevelChip';
+import { AlertLevelChip, LEVEL_LABELS } from './AlertLevelChip';
 import Colors from '@/constants/Colors';
 import Spacing from '@/constants/Spacing';
 import Typography from '@/constants/Typography';
@@ -28,6 +28,7 @@ export function TerritoryCard({
       testID={testID}
       onPress={onPress}
       accessibilityRole={onPress ? 'button' : undefined}
+      accessibilityLabel={`${name}, nivel ${LEVEL_LABELS[alertLevel].toLowerCase()}`}
       style={[
         styles.card,
         { backgroundColor: colors.surface, borderColor: colors.border },

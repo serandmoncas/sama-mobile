@@ -35,7 +35,9 @@ export default function NotificacionesScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Recibe alertas al instante</Text>
+      <Text style={styles.title} accessibilityRole="header">
+        Recibe alertas al instante
+      </Text>
       <Text style={styles.body}>
         Activa las notificaciones para enterarte apenas se emita una alerta en
         tu municipio. Puedes cambiar esto después desde los ajustes de tu

@@ -66,3 +66,10 @@ test('+ Añadir municipio navega al selector en modo standalone', async () => {
     '/onboarding/municipios?standalone=true',
   );
 });
+
+test('el título tiene accessibilityRole header', async () => {
+  await AsyncStorage.setItem('onboardingCompleted', 'true');
+  await render(<InicioScreen />);
+  const header = await screen.findByRole('header', { name: 'Mis territorios' });
+  expect(header).toBeTruthy();
+});

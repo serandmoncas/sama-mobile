@@ -1048,3 +1048,15 @@ gh pr checks --watch
 ```
 
 Expected: PR opens against `harness/bootstrap`, and CI passes. Do not merge — leave it open for human review, same as PR #1.
+
+> **Native dark-mode verification, added 2026-07-23 (post-plan):** the user
+> installed full Xcode after this plan's execution finished, giving access to
+> an iOS simulator. Using `xcrun simctl ui <device> appearance light|dark` on
+> the `/dev/design-system` catalog screen, dark mode was confirmed live and
+> visually on a real native runtime — not just via Task 7's mocked tests:
+> `Button` correctly inverts primary/secondary colors, `TerritoryCard`'s
+> surface/border/text adapt, `DataFreshnessBanner`'s text uses the correct
+> secondary tone in both themes, and `AlertLevelChip` stays visually identical
+> across themes (confirming its fixed semantic colors are working as
+> designed, per CA7's carve-out). This closes the "Pendiente antes de
+> mergear" item in PR #2's body — see the PR for the updated text.

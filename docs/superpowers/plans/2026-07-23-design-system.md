@@ -799,12 +799,14 @@ git commit -m "Add design system catalog screen at /dev/design-system"
 > before being written into this plan.
 
 **Files:**
+
 - Modify: `components/TerritoryCard.tsx` (add optional `testID` prop, forwarded to the root `Pressable` — needed for the test below to query the styled element)
 - Create: `components/__tests__/TerritoryCard-darkmode-test.tsx`
 - Create: `components/__tests__/Button-darkmode-test.tsx`
 - Create: `components/__tests__/DataFreshnessBanner-darkmode-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `useColorScheme` (existing), `Colors` (Task 1), `Button`/`TerritoryCard`/`DataFreshnessBanner` (Tasks 2/4/5) — mocks `useColorScheme` per test file to control its return value.
 - Produces: no new runtime interface; `TerritoryCard`'s prop type gains `testID?: string`, forwarded to its `Pressable` — a non-breaking addition (existing callers, including the catalog screen, are unaffected since it's optional).
 
@@ -853,16 +855,26 @@ const mockedUseColorScheme = useColorScheme as jest.Mock;
 
 test('usa los colores de Colors.dark cuando el tema es oscuro', async () => {
   mockedUseColorScheme.mockReturnValue('dark');
-  await render(<TerritoryCard name="Zaragoza" alertLevel="roja" testID="card" />);
-  const flatStyle = Object.assign({}, ...screen.getByTestId('card').props.style);
+  await render(
+    <TerritoryCard name="Zaragoza" alertLevel="roja" testID="card" />,
+  );
+  const flatStyle = Object.assign(
+    {},
+    ...screen.getByTestId('card').props.style,
+  );
   expect(flatStyle.backgroundColor).toBe(Colors.dark.surface);
   expect(flatStyle.borderColor).toBe(Colors.dark.border);
 });
 
 test('usa los colores de Colors.light cuando el tema es claro', async () => {
   mockedUseColorScheme.mockReturnValue('light');
-  await render(<TerritoryCard name="Zaragoza" alertLevel="roja" testID="card" />);
-  const flatStyle = Object.assign({}, ...screen.getByTestId('card').props.style);
+  await render(
+    <TerritoryCard name="Zaragoza" alertLevel="roja" testID="card" />,
+  );
+  const flatStyle = Object.assign(
+    {},
+    ...screen.getByTestId('card').props.style,
+  );
   expect(flatStyle.backgroundColor).toBe(Colors.light.surface);
   expect(flatStyle.borderColor).toBe(Colors.light.border);
 });
@@ -895,14 +907,20 @@ const mockedUseColorScheme = useColorScheme as jest.Mock;
 test('el botón primario usa colors.dark.tint como fondo en modo oscuro', async () => {
   mockedUseColorScheme.mockReturnValue('dark');
   await render(<Button label="Continuar" onPress={() => {}} />);
-  const flatStyle = Object.assign({}, ...screen.getByText('Continuar').parent!.props.style);
+  const flatStyle = Object.assign(
+    {},
+    ...screen.getByText('Continuar').parent!.props.style,
+  );
   expect(flatStyle.backgroundColor).toBe(Colors.dark.tint);
 });
 
 test('el botón primario usa colors.light.tint como fondo en modo claro', async () => {
   mockedUseColorScheme.mockReturnValue('light');
   await render(<Button label="Continuar" onPress={() => {}} />);
-  const flatStyle = Object.assign({}, ...screen.getByText('Continuar').parent!.props.style);
+  const flatStyle = Object.assign(
+    {},
+    ...screen.getByText('Continuar').parent!.props.style,
+  );
   expect(flatStyle.backgroundColor).toBe(Colors.light.tint);
 });
 ```
@@ -935,7 +953,10 @@ test('el texto usa colors.dark.textSecondary en modo oscuro', async () => {
   mockedUseColorScheme.mockReturnValue('dark');
   const now = new Date('2026-07-23T12:00:00Z');
   await render(<DataFreshnessBanner lastUpdated={now} now={now} />);
-  const flatStyle = Object.assign({}, ...screen.getByText('hace instantes').props.style);
+  const flatStyle = Object.assign(
+    {},
+    ...screen.getByText('hace instantes').props.style,
+  );
   expect(flatStyle.color).toBe(Colors.dark.textSecondary);
 });
 
@@ -943,7 +964,10 @@ test('el texto usa colors.light.textSecondary en modo claro', async () => {
   mockedUseColorScheme.mockReturnValue('light');
   const now = new Date('2026-07-23T12:00:00Z');
   await render(<DataFreshnessBanner lastUpdated={now} now={now} />);
-  const flatStyle = Object.assign({}, ...screen.getByText('hace instantes').props.style);
+  const flatStyle = Object.assign(
+    {},
+    ...screen.getByText('hace instantes').props.style,
+  );
   expect(flatStyle.color).toBe(Colors.light.textSecondary);
 });
 ```
@@ -989,7 +1013,7 @@ git commit -m "Add dark-mode verification tests for Button, TerritoryCard, DataF
 >   across all Task 1-6 source that no individual task had run `npm run format`
 >   for, commit `e402130`). Must be re-run after Task 7 lands (new test files).
 > - **Step 2** ran on the user's real phone via the web build (`npx expo start
->   --web`), NOT Expo Go — the App Store's current Expo Go client only supports
+--web`), NOT Expo Go — the App Store's current Expo Go client only supports
 >   SDK 54, and this project is on SDK 57, so `exp://` scanning fails with an
 >   incompatibility error. The 5 tabs and catalog screen's 4 sections were
 >   confirmed visually correct. Dark-mode adaptation could NOT be verified this

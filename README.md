@@ -35,14 +35,32 @@ Detalle completo de alcance, lo que queda explícitamente fuera del MVP, y las 4
 
 ## Estado actual
 
-En construcción del harness inicial (esqueleto de la app, tooling, CI, convenciones de spec/ADR) antes de empezar las funcionalidades del MVP. Ver el backlog para las épicas y su estado.
+El harness (esqueleto de la app, tooling, CI, convenciones de spec/ADR) y el sistema de diseño (tokens + componentes base) ya están mergeados a `main`. En este momento se está construyendo el onboarding (E1-03). Ver el backlog para el detalle de épicas y su estado.
+
+## Capturas
+
+| Los 5 tabs (Expo Router)           | Sistema de diseño — claro                                        | Sistema de diseño — oscuro                                       |
+| ---------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
+| ![Tabs](docs/screenshots/tabs.png) | ![Design system claro](docs/screenshots/design-system-light.png) | ![Design system oscuro](docs/screenshots/design-system-dark.png) |
+
+El catálogo del sistema de diseño (`Button`, `AlertLevelChip`, `TerritoryCard`, `DataFreshnessBanner`) vive en una ruta de desarrollo (`/dev/design-system`, fuera de la navegación de tabs) y no es parte del flujo del usuario final — es la herramienta con la que se verifica visualmente cada componente en claro y oscuro antes de usarlo en una pantalla real.
 
 ## Cómo correrlo
 
+Requisitos: Node.js 22+, npm. Para correr en un simulador de iOS necesitas Xcode instalado (Mac); para Android, Android Studio con un emulador configurado. También puedes probarlo sin instalar nada extra usando la app **Expo Go** en tu propio celular (ver abajo).
+
 ```bash
 npm install
-npm start          # abre el menú de Expo: presiona i (iOS), a (Android) o w (web)
+npm start
 ```
+
+Esto abre el menú interactivo de Expo en la terminal:
+
+- presiona **i** para abrir en el simulador de iOS
+- presiona **a** para abrir en el emulador de Android
+- presiona **w** para abrir la versión web en el navegador
+
+**Desde tu celular (sin simulador):** instala "Expo Go" desde la App Store o Play Store, asegúrate de estar en la misma red WiFi que tu computador, y escanea el código QR que aparece en la terminal al correr `npm start`. Nota: Expo Go en la tienda solo soporta la versión de SDK de Expo más reciente que haya publicado — si este proyecto usa un SDK más nuevo que el que soporta la app de la tienda, esa vía no va a funcionar hasta que Expo Go se actualice (usa el simulador o la versión web mientras tanto).
 
 Otros comandos:
 
@@ -51,6 +69,7 @@ npm run lint        # ESLint
 npm run typecheck   # tsc --noEmit
 npm test            # Jest
 npm run format      # Prettier (escribe cambios)
+npm run format:check # Prettier sin escribir, falla si algo está mal formateado
 ```
 
 ## Estructura del proyecto

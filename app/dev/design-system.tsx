@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Text, View } from '@/components/Themed';
 import { Button } from '@/components/Button';
@@ -11,6 +12,10 @@ import type { AlertLevel } from '@/constants/AlertColors';
 const ALERT_LEVELS: AlertLevel[] = ['verde', 'amarilla', 'naranja', 'roja'];
 
 export default function DesignSystemCatalogScreen() {
+  const now = useMemo(() => new Date(), []);
+  const twentyMinAgo = useMemo(() => new Date(now.getTime() - 20 * 60000), [now]);
+  const threeHoursAgo = useMemo(() => new Date(now.getTime() - 3 * 3600000), [now]);
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.section}>Button</Text>
@@ -36,9 +41,9 @@ export default function DesignSystemCatalogScreen() {
 
       <Text style={styles.section}>DataFreshnessBanner</Text>
       <View style={styles.column}>
-        <DataFreshnessBanner lastUpdated={new Date()} />
-        <DataFreshnessBanner lastUpdated={new Date(Date.now() - 20 * 60000)} />
-        <DataFreshnessBanner lastUpdated={new Date(Date.now() - 3 * 3600000)} />
+        <DataFreshnessBanner lastUpdated={now} />
+        <DataFreshnessBanner lastUpdated={twentyMinAgo} />
+        <DataFreshnessBanner lastUpdated={threeHoursAgo} />
       </View>
     </ScrollView>
   );

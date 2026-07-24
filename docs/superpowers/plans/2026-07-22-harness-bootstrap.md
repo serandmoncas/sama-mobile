@@ -209,7 +209,7 @@ git commit -m "Add ESLint, Prettier, and typecheck tooling"
 > and (b) `@testing-library/react-native@14.0.1` doesn't peer-depend on
 > `react-test-renderer` at all — as of v14 it requires the new `test-renderer`
 > package instead (confirmed via `npm view @testing-library/react-native@14.0.1
-> peerDependencies`, which lists `"test-renderer": "^1.0.0"` and no
+peerDependencies`, which lists `"test-renderer": "^1.0.0"` and no
 > `react-test-renderer` entry). `jest-expo` still bundles its own
 > `react-test-renderer@19.2.3` internally for its preset — that's automatic via
 > its own dependency tree and needs no explicit install. The corrected command
@@ -219,7 +219,7 @@ git commit -m "Add ESLint, Prettier, and typecheck tooling"
 > **Second correction (2026-07-22, found during Task 3 execution):** `jest@30.4.2`
 > (as pinned above) is incompatible with `jest-expo@57.0.2`'s own Jest-29-based
 > internal dependency tree — it crashes with `clearMocksOnScope is not a
-> function` (a `jest-mock` version split). The correct pin is `jest@29.7.0`,
+function` (a `jest-mock` version split). The correct pin is `jest@29.7.0`,
 > which matches jest-expo's actual ecosystem and still satisfies
 > `@testing-library/react-native@14.0.1`'s declared `jest: '>=29.0.0'` peer
 > range. The command below is corrected accordingly.
@@ -995,7 +995,6 @@ npm run format      # Prettier (escribe cambios)
 - `docs/adr/` — decisiones de arquitectura documentadas.
 - `docs/DEFINITION_OF_DONE.md` — checklist de cierre para cualquier ticket.
 - `CLAUDE.md` — el ciclo de desarrollo y las convenciones del repo, para humanos y agentes de IA.
-
 ````
 
 - [ ] **Step 2: Verify the CI badge URL matches the actual workflow path**

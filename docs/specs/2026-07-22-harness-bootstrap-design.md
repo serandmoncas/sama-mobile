@@ -61,10 +61,8 @@ sama-mobile/
 │   │   └── reportar.tsx
 │   ├── alerta/[id].tsx         # Detalle de alerta — target del deep link
 │   └── _layout.tsx
-├── src/
-│   ├── components/             # Componentes compartidos (vacío por ahora)
-│   ├── design-system/          # Tokens: colores, tipografía, espaciado (vacío por ahora)
-│   └── lib/                    # utilidades, clientes de datos (vacío por ahora)
+├── components/                 # Componentes compartidos (Themed, useColorScheme)
+├── constants/                  # Colors.ts y otras constantes compartidas
 ├── docs/
 │   ├── proposal/
 │   │   ├── mvp-proposal.md
@@ -98,5 +96,5 @@ Compila/typecheck → lint → test unitario (smoke de que Jest está bien cable
 
 ## Riesgos conocidos
 
-- Expo Router y la versión de Expo SDK evolucionan rápido; se fija la versión exacta en `package.json` y se documenta en el ADR si hay que actualizar antes de la Fase 1.
+- Expo Router y la versión de Expo SDK evolucionan rápido. El pin real de reproducibilidad es `package-lock.json` (committeado) + `npm ci` en CI, no los rangos `^`/`~` de `package.json` — esos permiten actualizaciones menores locales, pero CI y cualquier `npm ci` fresco instalan exactamente lo que dice el lockfile. Se documenta en el ADR si hay que actualizar antes de la Fase 1.
 - Este ciclo no valida las fuentes de datos del Dagran (E0-02 del backlog original) — sigue siendo un riesgo abierto y bloqueante para el trabajo futuro de integración de datos, fuera del alcance de este ciclo.

@@ -19,13 +19,13 @@
 
 ## Criterios de aceptación
 
-- [ ] CA1: las filas de selección de municipio tienen `minHeight` ≥ 44px declarado explícitamente en su estilo.
-- [ ] CA2: el botón "Volver" (modo standalone de municipios) tiene un área tocable ≥ 44px (vía padding), no solo el tamaño del texto.
-- [ ] CA3: cada fila de municipio tiene `accessibilityRole="checkbox"`, `accessibilityState={{ checked: <bool> }}`, y un `accessibilityLabel` que combina el nombre del municipio y su estado de selección.
-- [ ] CA4: el botón "Volver" tiene `accessibilityRole="button"`.
-- [ ] CA5: el título principal de cada una de las 8 pantallas (5 tabs + 3 de onboarding) tiene `accessibilityRole="header"`.
-- [ ] CA6: `TerritoryCard` tiene un `accessibilityLabel` explícito que combina el nombre del municipio y su nivel de alerta, en vez de depender del orden de lectura por defecto de sus elementos hijos.
-- [ ] CA7: ningún color nuevo se introduce en este ciclo sin ratio de contraste AA documentado (verificación, no cambio de tokens existentes).
+- [x] CA1: las filas de selección de municipio tienen `minHeight` ≥ 44px declarado explícitamente en su estilo.
+- [x] CA2: el botón "Volver" (modo standalone de municipios) tiene un área tocable ≥ 44px (vía padding), no solo el tamaño del texto.
+- [x] CA3: cada fila de municipio tiene `accessibilityRole="checkbox"`, `accessibilityState={{ checked: <bool> }}`, y un `accessibilityLabel` que combina el nombre del municipio y su estado de selección.
+- [x] CA4: el botón "Volver" tiene `accessibilityRole="button"`.
+- [x] CA5: el título principal de cada una de las 8 pantallas (5 tabs + 3 de onboarding) tiene `accessibilityRole="header"`.
+- [x] CA6: `TerritoryCard` tiene un `accessibilityLabel` explícito que combina el nombre del municipio y su nivel de alerta, en vez de depender del orden de lectura por defecto de sus elementos hijos.
+- [x] CA7: ningún color nuevo se introduce en este ciclo sin ratio de contraste AA documentado (verificación, no cambio de tokens existentes).
 
 ## Restricciones
 

@@ -1,4 +1,5 @@
 # Backlog del MVP — App móvil SAMA
+
 ### Anexo técnico a la propuesta v1.0 · Julio de 2026
 
 Convenciones: estimaciones en **puntos** (1 pt ≈ ½ día ideal de una persona). Prioridad: **P0** = imprescindible para el MVP, **P1** = importante, **P2** = deseable dentro del MVP si el cronograma lo permite. Los tickets están agrupados en épicas alineadas con las fases del cronograma (sección 6 de la propuesta).
@@ -203,17 +204,17 @@ Como Dagran, quiero validar la app con líderes comunitarios reales antes de pub
 
 ## Distribución del esfuerzo
 
-| Épica | Pts | Fase |
-|---|---|---|
-| E0 Descubrimiento y fundaciones | 24 | 0 |
-| E1 Esqueleto y sistema de diseño | 21 | 1 |
-| E2 BFF e integración de datos | 29 | 1 |
-| E3 Mapa y estaciones | 21 | 1 |
-| E4 Alertas push | 34 | 2 |
-| E5 Contenido "¿Qué hago?" | 13 | 1–2 |
-| E6 Reporte ciudadano | 16 | 2 |
-| E7 Calidad, piloto y publicación | 26 | 3 |
-| E8 Cierre y transferencia | 6 | 3 |
-| **Total** | **190** | |
+| Épica                            | Pts     | Fase |
+| -------------------------------- | ------- | ---- |
+| E0 Descubrimiento y fundaciones  | 24      | 0    |
+| E1 Esqueleto y sistema de diseño | 21      | 1    |
+| E2 BFF e integración de datos    | 29      | 1    |
+| E3 Mapa y estaciones             | 21      | 1    |
+| E4 Alertas push                  | 34      | 2    |
+| E5 Contenido "¿Qué hago?"        | 13      | 1–2  |
+| E6 Reporte ciudadano             | 16      | 2    |
+| E7 Calidad, piloto y publicación | 26      | 3    |
+| E8 Cierre y transferencia        | 6       | 3    |
+| **Total**                        | **190** |      |
 
 Dependencias críticas: **E0-02** desbloquea E2-02 y E4-02 (integración de datos) — por eso la fase 0 es innegociable. E4-03 (despacho) es el ticket de mayor riesgo técnico y se aborda al inicio de la fase 2 con su prueba de carga.

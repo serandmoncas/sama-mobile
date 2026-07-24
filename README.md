@@ -2,6 +2,8 @@
 
 **Alertas de riesgo hidrometeorológico para el territorio antioqueño, directo al bolsillo de cada ciudadano.**
 
+![CI](https://github.com/serandmoncas/sama-mobile/actions/workflows/ci.yml/badge.svg)
+
 ## Qué es esto
 
 Propuesta y desarrollo de un MVP de aplicación móvil (Android/iOS) para el **SAMA — Sistema de Alerta y Monitoreo de Antioquia**, preparada para el **Dagran** (Departamento Administrativo de Gestión del Riesgo de Desastres de Antioquia).
@@ -12,7 +14,7 @@ La propuesta completa (contexto, alcance, arquitectura, cronograma) está en [`d
 
 ## Sobre este proyecto
 
-Propuesta técnica y de producto, arquitectura y backlog diseñados por **Sergio Monsalve**. El desarrollo del MVP sigue una disciplina de *spec-driven development* asistido por agentes de IA: cada cambio parte de una spec versionada con criterios de aceptación, pasa por un plan aprobado antes de tocar código, se entrega en incrementos pequeños y se verifica de verdad (no solo "compila"). Ver [`docs/specs/`](docs/specs/) para la spec del ciclo en curso.
+Propuesta técnica y de producto, arquitectura y backlog diseñados por **Sergio Monsalve**. El desarrollo del MVP sigue una disciplina de _spec-driven development_ asistido por agentes de IA: cada cambio parte de una spec versionada con criterios de aceptación, pasa por un plan aprobado antes de tocar código, se entrega en incrementos pequeños y se verifica de verdad (no solo "compila"). El ciclo completo y sus convenciones están en [`CLAUDE.md`](CLAUDE.md) y en [`docs/specs/`](docs/specs/).
 
 ## Alcance del MVP
 
@@ -24,19 +26,38 @@ Propuesta técnica y de producto, arquitectura y backlog diseñados por **Sergio
 
 Detalle completo de alcance, lo que queda explícitamente fuera del MVP, y las 4 fases del plan de trabajo: [`docs/proposal/mvp-proposal.md`](docs/proposal/mvp-proposal.md).
 
-## Estado actual
-
-En arranque: la propuesta, el backlog y la metodología de desarrollo (spec-driven, con agentes de IA) ya están definidos y versionados en este repo. El esqueleto de la app (Expo + TypeScript, Expo Router), el tooling, el CI y las convenciones de código (ADR, Definition of Done, `CLAUDE.md`) están en construcción — ver el plan de implementación en [`docs/superpowers/plans/2026-07-22-harness-bootstrap.md`](docs/superpowers/plans/2026-07-22-harness-bootstrap.md).
-
-## Stack técnico (planeado)
+## Stack técnico
 
 - **App (este repo):** Expo + TypeScript, Expo Router, React Native.
-- **Backend (repo aparte, futuro):** Node.js/NestJS, PostgreSQL + PostGIS, Redis.
+- **Backend (repo aparte, futuro):** Node.js/NestJS, PostgreSQL + PostGIS, Redis — ver [`docs/adr/0001-repos-separados-app-bff.md`](docs/adr/0001-repos-separados-app-bff.md) para por qué son dos repos.
 - **Notificaciones push:** Firebase Cloud Messaging + APNs vía Expo Notifications.
 - **Mapas:** MapLibre GL.
 
+## Estado actual
+
+En construcción del harness inicial (esqueleto de la app, tooling, CI, convenciones de spec/ADR) antes de empezar las funcionalidades del MVP. Ver el backlog para las épicas y su estado.
+
+## Cómo correrlo
+
+```bash
+npm install
+npm start          # abre el menú de Expo: presiona i (iOS), a (Android) o w (web)
+```
+
+Otros comandos:
+
+```bash
+npm run lint        # ESLint
+npm run typecheck   # tsc --noEmit
+npm test            # Jest
+npm run format      # Prettier (escribe cambios)
+```
+
 ## Estructura del proyecto
 
+- `app/` — pantallas y navegación (Expo Router, basado en archivos).
 - `docs/proposal/` — la propuesta del MVP y el backlog completo.
 - `docs/specs/` — specs de cada ciclo de trabajo, versionadas.
-- `docs/superpowers/plans/` — planes de implementación en curso.
+- `docs/adr/` — decisiones de arquitectura documentadas.
+- `docs/DEFINITION_OF_DONE.md` — checklist de cierre para cualquier ticket.
+- `CLAUDE.md` — el ciclo de desarrollo y las convenciones del repo, para humanos y agentes de IA.

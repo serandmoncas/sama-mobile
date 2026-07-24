@@ -191,6 +191,18 @@ Expected: FAIL with "Cannot find module '../Button'".
 
 - [ ] **Step 3: Implement the component**
 
+> **Correction (2026-07-23, found + verified during Task 2 execution):** the
+> `Pressable` below sets `disabled={disabled}` in addition to nulling `onPress`.
+> Without the native `disabled` prop, `fireEvent.press` in the pinned
+> `@testing-library/react-native` version still matches and fires the `Button`
+> composite's own (never-nulled) `onPress` prop while climbing ancestors looking
+> for a handler, because `Pressability`'s `onStartShouldSetResponder` only
+> reads `disabled` from the `Pressable`'s own prop, not from whether `onPress`
+> was nulled. Verified independently by the task reviewer via source-tracing
+> `fire-event.js` and `Pressability.js`, and by reproducing the test failure
+> with the line removed. This also fixes real (non-test) behavior: a disabled
+> control should set the native `disabled` prop regardless.
+
 `components/Button.tsx`:
 
 ```tsx
@@ -221,6 +233,7 @@ export function Button({
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ disabled }}
+      disabled={disabled}
       onPress={disabled ? undefined : onPress}
       style={[
         styles.base,

@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { useColorScheme } from './useColorScheme';
-import { Text } from './Themed';
+import { Text, View } from './Themed';
 import { AlertLevelChip, LEVEL_LABELS } from './AlertLevelChip';
 import Colors from '@/constants/Colors';
 import Spacing from '@/constants/Spacing';
@@ -12,6 +12,7 @@ type TerritoryCardProps = {
   alertLevel: AlertLevel;
   onPress?: () => void;
   testID?: string;
+  coberturaConfirmada?: boolean;
 };
 
 export function TerritoryCard({
@@ -19,6 +20,7 @@ export function TerritoryCard({
   alertLevel,
   onPress,
   testID,
+  coberturaConfirmada = true,
 }: TerritoryCardProps) {
   const theme = useColorScheme();
   const colors = Colors[theme];
@@ -34,7 +36,14 @@ export function TerritoryCard({
         { backgroundColor: colors.surface, borderColor: colors.border },
       ]}
     >
-      <Text style={styles.name}>{name}</Text>
+      <View style={styles.info}>
+        <Text style={styles.name}>{name}</Text>
+        {!coberturaConfirmada && (
+          <Text style={styles.coverageNotice}>
+            Cobertura de estaciones aún no confirmada
+          </Text>
+        )}
+      </View>
       <AlertLevelChip level={alertLevel} />
     </Pressable>
   );
@@ -49,7 +58,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: Spacing.lg,
   },
+  info: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
   name: {
     ...Typography.subtitle,
+  },
+  coverageNotice: {
+    ...Typography.caption,
   },
 });

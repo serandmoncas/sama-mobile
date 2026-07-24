@@ -73,3 +73,16 @@ test('el título tiene accessibilityRole header', async () => {
   const header = await screen.findByRole('header', { name: 'Mis territorios' });
   expect(header).toBeTruthy();
 });
+
+test('muestra el aviso de cobertura para municipios sin estaciones confirmadas', async () => {
+  await AsyncStorage.setItem('onboardingCompleted', 'true');
+  await AsyncStorage.setItem(
+    'selectedMunicipios',
+    JSON.stringify(['Zaragoza', 'Medellín']),
+  );
+  await render(<InicioScreen />);
+  await waitFor(() => screen.getByText('Medellín'));
+  expect(
+    screen.getByText('Cobertura de estaciones aún no confirmada'),
+  ).toBeTruthy();
+});

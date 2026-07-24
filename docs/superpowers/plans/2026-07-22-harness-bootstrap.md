@@ -977,7 +977,6 @@ En construcción del harness inicial (esqueleto de la app, tooling, CI, convenci
 npm install
 npm start          # abre el menú de Expo: presiona i (iOS), a (Android) o w (web)
 ```
-````
 
 Otros comandos:
 
@@ -1003,7 +1002,7 @@ npm run format      # Prettier (escribe cambios)
 
 ```bash
 cat .github/workflows/ci.yml | head -1
-````
+```
 
 Expected: confirms the workflow file exists at `.github/workflows/ci.yml`, matching the badge URL's `.../workflows/ci.yml/badge.svg` path.
 

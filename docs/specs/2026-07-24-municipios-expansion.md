@@ -20,12 +20,12 @@
 
 ## Criterios de aceptación
 
-- [ ] CA1: `constants/Municipios.ts` expone la lista completa de 28 municipios (3 con cobertura confirmada + 25 sin cobertura confirmada), y una función que indica si un municipio dado tiene cobertura confirmada.
-- [ ] CA2: la pantalla de selección de municipios (onboarding y modo standalone) muestra los 28 municipios, con scroll (ya no caben todos sin desbordar la pantalla).
-- [ ] CA3: en el selector, cada municipio sin cobertura confirmada muestra el texto "Cobertura de estaciones aún no confirmada" debajo de su nombre.
-- [ ] CA4: `TerritoryCard` acepta un nuevo prop opcional para indicar si la cobertura está confirmada, y muestra el mismo aviso cuando no lo está; no mostrar nada cuando el prop no se pasa (compatibilidad con usos existentes).
-- [ ] CA5: en Inicio, cada `TerritoryCard` de un municipio seleccionado recibe el estado de cobertura correcto según `constants/Municipios.ts`.
-- [ ] CA6: los 3 municipios piloto (Zaragoza, Carepa, Turbo) siguen funcionando exactamente igual que antes (sin aviso de cobertura no confirmada).
+- [x] CA1: `constants/Municipios.ts` expone la lista completa de 28 municipios (3 con cobertura confirmada + 25 sin cobertura confirmada), y una función que indica si un municipio dado tiene cobertura confirmada.
+- [x] CA2: la pantalla de selección de municipios (onboarding y modo standalone) muestra los 28 municipios, con scroll (ya no caben todos sin desbordar la pantalla).
+- [x] CA3: en el selector, cada municipio sin cobertura confirmada muestra el texto "Cobertura de estaciones aún no confirmada" debajo de su nombre.
+- [x] CA4: `TerritoryCard` acepta un nuevo prop opcional para indicar si la cobertura está confirmada, y muestra el mismo aviso cuando no lo está; no mostrar nada cuando el prop no se pasa (compatibilidad con usos existentes).
+- [x] CA5: en Inicio, cada `TerritoryCard` de un municipio seleccionado recibe el estado de cobertura correcto según `constants/Municipios.ts`.
+- [x] CA6: los 3 municipios piloto (Zaragoza, Carepa, Turbo) siguen funcionando exactamente igual que antes (sin aviso de cobertura no confirmada).
 
 ## Restricciones
 

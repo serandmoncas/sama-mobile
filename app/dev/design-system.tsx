@@ -13,8 +13,14 @@ const ALERT_LEVELS: AlertLevel[] = ['verde', 'amarilla', 'naranja', 'roja'];
 
 export default function DesignSystemCatalogScreen() {
   const now = useMemo(() => new Date(), []);
-  const twentyMinAgo = useMemo(() => new Date(now.getTime() - 20 * 60000), [now]);
-  const threeHoursAgo = useMemo(() => new Date(now.getTime() - 3 * 3600000), [now]);
+  const twentyMinAgo = useMemo(
+    () => new Date(now.getTime() - 20 * 60000),
+    [now],
+  );
+  const threeHoursAgo = useMemo(
+    () => new Date(now.getTime() - 3 * 3600000),
+    [now],
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -35,7 +41,11 @@ export default function DesignSystemCatalogScreen() {
       <Text style={styles.section}>TerritoryCard</Text>
       <View style={styles.column}>
         {ALERT_LEVELS.map((level) => (
-          <TerritoryCard key={level} name={`Municipio ${level}`} alertLevel={level} />
+          <TerritoryCard
+            key={level}
+            name={`Municipio ${level}`}
+            alertLevel={level}
+          />
         ))}
       </View>
 

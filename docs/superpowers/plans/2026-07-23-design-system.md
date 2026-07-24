@@ -25,12 +25,14 @@
 ### Task 1: Color, typography, and spacing tokens
 
 **Files:**
+
 - Modify: `constants/Colors.ts`
 - Create: `constants/AlertColors.ts`
 - Create: `constants/Typography.ts`
 - Create: `constants/Spacing.ts`
 
 **Interfaces:**
+
 - Produces: `Colors.light.surface`, `Colors.light.border`, `Colors.light.textSecondary` (and dark equivalents) — consumed by Task 4 (`TerritoryCard`). `AlertColors` default export + `AlertLevel` type — consumed by Tasks 3-4 and the catalog screen. `Typography` default export — consumed by Tasks 2-5. `Spacing` default export — consumed by Tasks 2-6.
 
 - [ ] **Step 1: Extend `constants/Colors.ts` with neutral surface/border/text tokens**
@@ -151,10 +153,12 @@ git commit -m "Add color, typography, and spacing tokens"
 ### Task 2: Button component
 
 **Files:**
+
 - Create: `components/Button.tsx`
 - Create: `components/__tests__/Button-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Colors` (Task 1), `Spacing`/`Typography` (Task 1), `useColorScheme` (existing, `components/useColorScheme.ts`).
 - Produces: `Button` component with props `{ label: string; onPress: () => void; variant?: 'primary' | 'secondary'; disabled?: boolean }` — consumed by the catalog screen (Task 6).
 
@@ -245,7 +249,12 @@ export function Button({
         },
       ]}
     >
-      <Text style={[styles.label, { color: isPrimary ? colors.background : colors.tint }]}>
+      <Text
+        style={[
+          styles.label,
+          { color: isPrimary ? colors.background : colors.tint },
+        ]}
+      >
         {label}
       </Text>
     </Pressable>
@@ -290,10 +299,12 @@ git commit -m "Add Button component"
 ### Task 3: AlertLevelChip component
 
 **Files:**
+
 - Create: `components/AlertLevelChip.tsx`
 - Create: `components/__tests__/AlertLevelChip-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `AlertColors`, `AlertLevel` (Task 1), `Spacing`/`Typography` (Task 1).
 - Produces: `AlertLevelChip` component with prop `{ level: AlertLevel }` — consumed by `TerritoryCard` (Task 4) and the catalog screen (Task 6).
 
@@ -310,10 +321,13 @@ test.each([
   ['amarilla', 'Amarilla'],
   ['naranja', 'Naranja'],
   ['roja', 'Roja'],
-] as const)('muestra el texto correcto para el nivel %s', async (level, expectedLabel) => {
-  await render(<AlertLevelChip level={level} />);
-  expect(screen.getByText(expectedLabel)).toBeTruthy();
-});
+] as const)(
+  'muestra el texto correcto para el nivel %s',
+  async (level, expectedLabel) => {
+    await render(<AlertLevelChip level={level} />);
+    expect(screen.getByText(expectedLabel)).toBeTruthy();
+  },
+);
 ```
 
 - [ ] **Step 2: Run the test to verify it fails**
@@ -350,7 +364,9 @@ export function AlertLevelChip({ level }: AlertLevelChipProps) {
 
   return (
     <View style={[styles.chip, { backgroundColor: colors.background }]}>
-      <Text style={[styles.label, { color: colors.text }]}>{LEVEL_LABELS[level]}</Text>
+      <Text style={[styles.label, { color: colors.text }]}>
+        {LEVEL_LABELS[level]}
+      </Text>
     </View>
   );
 }
@@ -389,10 +405,12 @@ git commit -m "Add AlertLevelChip component"
 ### Task 4: TerritoryCard component
 
 **Files:**
+
 - Create: `components/TerritoryCard.tsx`
 - Create: `components/__tests__/TerritoryCard-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `AlertLevelChip` (Task 3), `AlertLevel` type (Task 1), `Colors`/`Spacing`/`Typography` (Task 1), `Text` from `components/Themed.tsx` (existing), `useColorScheme` (existing).
 - Produces: `TerritoryCard` component with props `{ name: string; alertLevel: AlertLevel; onPress?: () => void }` — consumed by the catalog screen (Task 6).
 
@@ -439,7 +457,11 @@ type TerritoryCardProps = {
   onPress?: () => void;
 };
 
-export function TerritoryCard({ name, alertLevel, onPress }: TerritoryCardProps) {
+export function TerritoryCard({
+  name,
+  alertLevel,
+  onPress,
+}: TerritoryCardProps) {
   const theme = useColorScheme();
   const colors = Colors[theme];
 
@@ -447,7 +469,10 @@ export function TerritoryCard({ name, alertLevel, onPress }: TerritoryCardProps)
     <Pressable
       onPress={onPress}
       accessibilityRole={onPress ? 'button' : undefined}
-      style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}
+      style={[
+        styles.card,
+        { backgroundColor: colors.surface, borderColor: colors.border },
+      ]}
     >
       <Text style={styles.name}>{name}</Text>
       <AlertLevelChip level={alertLevel} />
@@ -490,10 +515,12 @@ git commit -m "Add TerritoryCard component"
 ### Task 5: DataFreshnessBanner component
 
 **Files:**
+
 - Create: `components/DataFreshnessBanner.tsx`
 - Create: `components/__tests__/DataFreshnessBanner-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `useColorScheme` (existing, `components/useColorScheme.ts`), `Colors`/`Spacing`/`Typography` (Task 1).
 - Produces: `DataFreshnessBanner` component with prop `{ lastUpdated: Date }`, and the exported pure function `formatRelativeTime(lastUpdated: Date, now?: Date): string` — consumed by the catalog screen (Task 6).
 
@@ -503,7 +530,10 @@ git commit -m "Add TerritoryCard component"
 
 ```tsx
 import { render, screen } from '@testing-library/react-native';
-import { DataFreshnessBanner, formatRelativeTime } from '../DataFreshnessBanner';
+import {
+  DataFreshnessBanner,
+  formatRelativeTime,
+} from '../DataFreshnessBanner';
 
 describe('formatRelativeTime', () => {
   const now = new Date('2026-07-23T12:00:00Z');
@@ -551,8 +581,13 @@ import Colors from '@/constants/Colors';
 import Spacing from '@/constants/Spacing';
 import Typography from '@/constants/Typography';
 
-export function formatRelativeTime(lastUpdated: Date, now: Date = new Date()): string {
-  const diffMinutes = Math.floor((now.getTime() - lastUpdated.getTime()) / 60000);
+export function formatRelativeTime(
+  lastUpdated: Date,
+  now: Date = new Date(),
+): string {
+  const diffMinutes = Math.floor(
+    (now.getTime() - lastUpdated.getTime()) / 60000,
+  );
 
   if (diffMinutes < 1) {
     return 'hace instantes';
@@ -570,7 +605,10 @@ type DataFreshnessBannerProps = {
   now?: Date;
 };
 
-export function DataFreshnessBanner({ lastUpdated, now }: DataFreshnessBannerProps) {
+export function DataFreshnessBanner({
+  lastUpdated,
+  now,
+}: DataFreshnessBannerProps) {
   const theme = useColorScheme();
   const colors = Colors[theme];
 
@@ -617,10 +655,12 @@ git commit -m "Add DataFreshnessBanner component"
 ### Task 6: Catalog screen
 
 **Files:**
+
 - Create: `app/dev/design-system.tsx`
 - Create: `app/dev/__tests__/design-system-test.tsx`
 
 **Interfaces:**
+
 - Consumes: `Button` (Task 2), `AlertLevelChip` (Task 3), `TerritoryCard` (Task 4), `DataFreshnessBanner` (Task 5), `AlertLevel` type (Task 1), `Spacing`/`Typography` (Task 1), `Text`/`View` from `components/Themed.tsx`.
 - Produces: the route `/dev/design-system`, reachable via direct URL during development (not linked from any tab). No later task in this plan consumes this screen.
 
@@ -686,7 +726,11 @@ export default function DesignSystemCatalogScreen() {
       <Text style={styles.section}>TerritoryCard</Text>
       <View style={styles.column}>
         {ALERT_LEVELS.map((level) => (
-          <TerritoryCard key={level} name={`Municipio ${level}`} alertLevel={level} />
+          <TerritoryCard
+            key={level}
+            name={`Municipio ${level}`}
+            alertLevel={level}
+          />
         ))}
       </View>
 

@@ -19,7 +19,9 @@ export function AlertLevelChip({ level }: AlertLevelChipProps) {
 
   return (
     <View style={[styles.chip, { backgroundColor: colors.background }]}>
-      <Text style={[styles.label, { color: colors.text }]}>{LEVEL_LABELS[level]}</Text>
+      <Text style={[styles.label, { color: colors.text }]}>
+        {LEVEL_LABELS[level]}
+      </Text>
     </View>
   );
 }

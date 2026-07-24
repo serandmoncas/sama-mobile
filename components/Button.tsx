@@ -37,7 +37,12 @@ export function Button({
         },
       ]}
     >
-      <Text style={[styles.label, { color: isPrimary ? colors.background : colors.tint }]}>
+      <Text
+        style={[
+          styles.label,
+          { color: isPrimary ? colors.background : colors.tint },
+        ]}
+      >
         {label}
       </Text>
     </Pressable>

@@ -4,8 +4,13 @@ import Colors from '@/constants/Colors';
 import Spacing from '@/constants/Spacing';
 import Typography from '@/constants/Typography';
 
-export function formatRelativeTime(lastUpdated: Date, now: Date = new Date()): string {
-  const diffMinutes = Math.floor((now.getTime() - lastUpdated.getTime()) / 60000);
+export function formatRelativeTime(
+  lastUpdated: Date,
+  now: Date = new Date(),
+): string {
+  const diffMinutes = Math.floor(
+    (now.getTime() - lastUpdated.getTime()) / 60000,
+  );
 
   if (diffMinutes < 1) {
     return 'hace instantes';
@@ -23,7 +28,10 @@ type DataFreshnessBannerProps = {
   now?: Date;
 };
 
-export function DataFreshnessBanner({ lastUpdated, now }: DataFreshnessBannerProps) {
+export function DataFreshnessBanner({
+  lastUpdated,
+  now,
+}: DataFreshnessBannerProps) {
   const theme = useColorScheme();
   const colors = Colors[theme];
 

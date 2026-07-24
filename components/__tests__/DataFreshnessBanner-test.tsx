@@ -1,5 +1,8 @@
 import { render, screen } from '@testing-library/react-native';
-import { DataFreshnessBanner, formatRelativeTime } from '../DataFreshnessBanner';
+import {
+  DataFreshnessBanner,
+  formatRelativeTime,
+} from '../DataFreshnessBanner';
 
 describe('formatRelativeTime', () => {
   const now = new Date('2026-07-23T12:00:00Z');

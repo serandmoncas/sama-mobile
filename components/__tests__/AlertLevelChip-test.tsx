@@ -6,7 +6,10 @@ test.each([
   ['amarilla', 'Amarilla'],
   ['naranja', 'Naranja'],
   ['roja', 'Roja'],
-] as const)('muestra el texto correcto para el nivel %s', async (level, expectedLabel) => {
-  await render(<AlertLevelChip level={level} />);
-  expect(screen.getByText(expectedLabel)).toBeTruthy();
-});
+] as const)(
+  'muestra el texto correcto para el nivel %s',
+  async (level, expectedLabel) => {
+    await render(<AlertLevelChip level={level} />);
+    expect(screen.getByText(expectedLabel)).toBeTruthy();
+  },
+);

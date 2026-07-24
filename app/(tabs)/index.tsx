@@ -8,6 +8,7 @@ import {
   getOnboardingCompleted,
   getSelectedMunicipios,
 } from '@/lib/onboarding';
+import { tieneCoberturaConfirmada } from '@/constants/Municipios';
 import Spacing from '@/constants/Spacing';
 
 export default function InicioScreen() {
@@ -54,7 +55,12 @@ export default function InicioScreen() {
         <Text>Aún no has añadido ningún municipio.</Text>
       ) : (
         municipios.map((name) => (
-          <TerritoryCard key={name} name={name} alertLevel="verde" />
+          <TerritoryCard
+            key={name}
+            name={name}
+            alertLevel="verde"
+            coberturaConfirmada={tieneCoberturaConfirmada(name)}
+          />
         ))
       )}
       <Button

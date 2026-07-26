@@ -1,10 +1,26 @@
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
+);
+
+jest.mock('expo-router', () => {
+  const { useEffect } = require('react');
+  return {
+    useFocusEffect: (cb: () => void) => useEffect(cb, []),
+  };
+});
+
 import {
   fireEvent,
   render,
   screen,
   waitFor,
 } from '@testing-library/react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import QueHagoScreen from '../que-hago';
+
+beforeEach(async () => {
+  await AsyncStorage.clear();
+});
 
 test('el título tiene accessibilityRole header', async () => {
   await render(<QueHagoScreen />);
@@ -103,4 +119,37 @@ test('avenida torrencial y después muestran su propio contenido', async () => {
       '[Contenido pendiente de validación por el equipo social del SAMA — Avenida torrencial / Después]',
     ),
   ).toBeTruthy();
+});
+
+test('el directorio tiene accessibilityRole header', async () => {
+  await render(<QueHagoScreen />);
+  const header = screen.getByRole('header', {
+    name: 'Directorio de emergencia',
+  });
+  expect(header).toBeTruthy();
+});
+
+test('sin municipios seleccionados, muestra un mensaje en vez del directorio', async () => {
+  await render(<QueHagoScreen />);
+  await waitFor(() =>
+    expect(
+      screen.getByText('Aún no has añadido ningún municipio.'),
+    ).toBeTruthy(),
+  );
+});
+
+test('con municipios seleccionados, muestra sus 3 entidades con teléfono pendiente', async () => {
+  await AsyncStorage.setItem(
+    'selectedMunicipios',
+    JSON.stringify(['Zaragoza']),
+  );
+  await render(<QueHagoScreen />);
+  await waitFor(() => screen.getByText('Zaragoza'));
+  expect(screen.getByText('CMGRD')).toBeTruthy();
+  expect(screen.getByText('Bomberos')).toBeTruthy();
+  expect(screen.getByText('Defensa Civil')).toBeTruthy();
+  const boton = screen.getByTestId('llamar-Zaragoza-cmgrd');
+  expect(boton.props.accessibilityState).toEqual({ disabled: true });
+  const botonStyle = Object.assign({}, ...boton.props.style);
+  expect(botonStyle.minHeight).toBe(44);
 });

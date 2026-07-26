@@ -19,7 +19,7 @@ import { getSelectedMunicipios } from '@/lib/onboarding';
 export default function QueHagoScreen() {
   const [evento, setEvento] = useState<EventoId>(EVENTOS[0].id);
   const [fase, setFase] = useState<Fase>(FASES[0].id);
-  const [municipios, setMunicipios] = useState<string[]>([]);
+  const [municipios, setMunicipios] = useState<string[] | null>(null);
   const theme = useColorScheme();
   const colors = Colors[theme];
 
@@ -120,13 +120,13 @@ export default function QueHagoScreen() {
         <Text style={styles.sectionTitle} accessibilityRole="header">
           Directorio de emergencia
         </Text>
-        {municipios.length === 0 ? (
+        {municipios === null ? null : municipios.length === 0 ? (
           <Text>Aún no has añadido ningún municipio.</Text>
         ) : (
           municipios.map((municipio) => (
             <View key={municipio} style={styles.municipioBlock}>
               <Text style={styles.municipioTitle}>{municipio}</Text>
-              {DIRECTORIO[municipio].map((entidad) => (
+              {(DIRECTORIO[municipio] ?? []).map((entidad) => (
                 <View key={entidad.id} style={styles.entidadRow}>
                   <Text style={styles.entidadLabel}>{entidad.label}</Text>
                   <Pressable
@@ -141,7 +141,10 @@ export default function QueHagoScreen() {
                     }
                     onPress={
                       entidad.telefono
-                        ? () => Linking.openURL(`tel:${entidad.telefono}`)
+                        ? () =>
+                            Linking.openURL(`tel:${entidad.telefono}`).catch(
+                              () => {},
+                            )
                         : undefined
                     }
                     style={[

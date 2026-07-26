@@ -20,14 +20,14 @@
 
 ## Criterios de aceptación
 
-- [ ] CA1: `constants/Directorio.ts` expone un directorio con 3 entidades (CMGRD, Bomberos, Defensa Civil) para cada uno de los 28 municipios, generado a partir de la lista de municipios existente (no listado a mano), con `telefono: null` en todos los casos hoy.
-- [ ] CA2: la pantalla "¿Qué hago?" muestra una sección "Directorio de emergencia" debajo del contenido de recomendaciones, con scroll.
-- [ ] CA3: el directorio solo muestra los municipios que el usuario seleccionó en onboarding, y se actualiza si la selección cambia entre visitas al tab.
-- [ ] CA4: si el usuario no ha seleccionado ningún municipio, se muestra un mensaje en vez de una sección vacía.
-- [ ] CA5: cuando el teléfono de una entidad es `null`, su botón de llamada aparece deshabilitado con el texto "Número pendiente de verificación".
-- [ ] CA6: cuando el teléfono de una entidad no es `null`, su botón de llamada usa `Linking.openURL('tel:...')`.
-- [ ] CA7: todo el contenido es local salvo la selección de municipios (ya cacheada localmente) — no hay llamadas de red nuevas.
-- [ ] CA8: los elementos interactivos (filas de entidad, botón de llamada) siguen las convenciones de accesibilidad ya establecidas (`accessibilityRole`, `accessibilityState` si aplica, `minHeight: 44`).
+- [x] CA1: `constants/Directorio.ts` expone un directorio con 3 entidades (CMGRD, Bomberos, Defensa Civil) para cada uno de los 28 municipios, generado a partir de la lista de municipios existente (no listado a mano), con `telefono: null` en todos los casos hoy.
+- [x] CA2: la pantalla "¿Qué hago?" muestra una sección "Directorio de emergencia" debajo del contenido de recomendaciones, con scroll.
+- [x] CA3: el directorio solo muestra los municipios que el usuario seleccionó en onboarding, y se actualiza si la selección cambia entre visitas al tab.
+- [x] CA4: si el usuario no ha seleccionado ningún municipio, se muestra un mensaje en vez de una sección vacía.
+- [x] CA5: cuando el teléfono de una entidad es `null`, su botón de llamada aparece deshabilitado con el texto "Número pendiente de verificación".
+- [x] CA6: cuando el teléfono de una entidad no es `null`, su botón de llamada usa `Linking.openURL('tel:...')`.
+- [x] CA7: todo el contenido es local salvo la selección de municipios (ya cacheada localmente) — no hay llamadas de red nuevas.
+- [x] CA8: los elementos interactivos (filas de entidad, botón de llamada) siguen las convenciones de accesibilidad ya establecidas (`accessibilityRole`, `accessibilityState` si aplica, `minHeight: 44`).
 
 ## Restricciones
 

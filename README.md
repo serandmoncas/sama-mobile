@@ -35,19 +35,46 @@ Detalle completo de alcance, lo que queda explícitamente fuera del MVP, y las 4
 
 ## Estado actual
 
-El harness (esqueleto de la app, tooling, CI, convenciones de spec/ADR) y el sistema de diseño (tokens + componentes base) ya están mergeados a `main`. En este momento se está construyendo el onboarding (E1-03). Ver el backlog para el detalle de épicas y su estado.
+7 ciclos de trabajo mergeados a `main`, cada uno con su spec, plan de implementación y revisión de código (ver [`docs/specs/`](docs/specs/) y [`docs/superpowers/plans/`](docs/superpowers/plans/)):
+
+- ✅ **Harness** (adaptado de E0-05) — esqueleto de la app, tooling, CI, convenciones de spec/ADR.
+- ✅ **E1-02** — sistema de diseño en código (tokens + componentes base).
+- ✅ **E1-03** — onboarding sin cuenta (bienvenida → municipio(s) → notificaciones).
+- ✅ **E1-05** — accesibilidad base (roles/estados de lector de pantalla, targets táctiles ≥44px).
+- ✅ **E5-01** — módulo "¿Qué hago?" (recomendaciones antes/durante/después por tipo de evento).
+- ✅ **Ampliación de municipios** — el selector de onboarding pasó de 3 a 28 municipios (Valle de Aburrá + los 15 más poblados del resto de Antioquia, población DANE), con aviso explícito de cuáles tienen estaciones SAMA confirmadas y cuáles no.
+- ✅ **E5-02** — directorio de emergencia por municipio (CMGRD, Bomberos, Defensa Civil), con botón de llamada real listo para cuando exista un teléfono verificado.
+
+### Qué falta
+
+Siguiente en el backlog, sin bloqueo externo:
+
+- **E3-01** — mapa base con MapLibre (shell de UI; sin datos de estaciones reales todavía, eso depende de E0-02/E2).
+- **E6-01** — formulario de reporte ciudadano (foto + ubicación + categoría, cola offline).
+
+Todo lo demás depende de trabajo que no se resuelve solo con código en este repo:
+
+- **El BFF** (backend, repo aparte) no existe todavía — bloquea el mapa con datos reales, las alertas push, y una caché offline con sentido (E1-04, épicas E2/E3-02/E3-03/E4).
+- **E0-02** (inventario y prueba de fuentes de datos SAMA) y el resto de la épica E0 requieren trabajo directo con Dagran/G-LIMA — talleres, acceso a APIs reales, protocolo de niveles firmado. No es código, es gestión del proyecto.
+- **Contenido real** (recomendaciones de "¿Qué hago?" validadas por el equipo social del SAMA, teléfonos de emergencia reales) queda intencionalmente marcado como pendiente en la app — no se fabricó contenido de protección civil ni números de emergencia sin una fuente verificable, tratándose de una app de alertas para emergencias reales.
+
+Detalle completo de las 48 tareas originales y su estado: [`docs/proposal/backlog.md`](docs/proposal/backlog.md).
 
 ## Capturas
 
-| Los 5 tabs (Expo Router)           | Sistema de diseño — claro                                        | Sistema de diseño — oscuro                                       |
-| ---------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
-| ![Tabs](docs/screenshots/tabs.png) | ![Design system claro](docs/screenshots/design-system-light.png) | ![Design system oscuro](docs/screenshots/design-system-dark.png) |
+| Onboarding                                             | Selector de municipio (28, con aviso de cobertura)                   | Inicio                                 | "¿Qué hago?" + directorio                  |
+| ------------------------------------------------------ | -------------------------------------------------------------------- | -------------------------------------- | ------------------------------------------ |
+| ![Onboarding](docs/screenshots/onboarding-welcome.png) | ![Selector de municipio](docs/screenshots/onboarding-municipios.png) | ![Inicio](docs/screenshots/inicio.png) | ![Qué hago](docs/screenshots/que-hago.png) |
+
+| Sistema de diseño — claro                                        | Sistema de diseño — oscuro                                       |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------- |
+| ![Design system claro](docs/screenshots/design-system-light.png) | ![Design system oscuro](docs/screenshots/design-system-dark.png) |
 
 El catálogo del sistema de diseño (`Button`, `AlertLevelChip`, `TerritoryCard`, `DataFreshnessBanner`) vive en una ruta de desarrollo (`/dev/design-system`, fuera de la navegación de tabs) y no es parte del flujo del usuario final — es la herramienta con la que se verifica visualmente cada componente en claro y oscuro antes de usarlo en una pantalla real.
 
 ## Cómo correrlo
 
-Requisitos: Node.js 22+, npm. Para correr en un simulador de iOS necesitas Xcode instalado (Mac); para Android, Android Studio con un emulador configurado. También puedes probarlo sin instalar nada extra usando la app **Expo Go** en tu propio celular (ver abajo).
+Requisitos: Node.js 22+, npm. Para correr en un simulador de iOS necesitas Xcode instalado (Mac); para Android, Android Studio con un emulador configurado.
 
 ```bash
 npm install
@@ -60,7 +87,21 @@ Esto abre el menú interactivo de Expo en la terminal:
 - presiona **a** para abrir en el emulador de Android
 - presiona **w** para abrir la versión web en el navegador
 
-**Desde tu celular (sin simulador):** instala "Expo Go" desde la App Store o Play Store, asegúrate de estar en la misma red WiFi que tu computador, y escanea el código QR que aparece en la terminal al correr `npm start`. Nota: Expo Go en la tienda solo soporta la versión de SDK de Expo más reciente que haya publicado — si este proyecto usa un SDK más nuevo que el que soporta la app de la tienda, esa vía no va a funcionar hasta que Expo Go se actualice (usa el simulador o la versión web mientras tanto).
+### Desde tu celular, con Expo Go (sin cable, más rápido)
+
+Instala "Expo Go" desde la App Store o Play Store, asegúrate de estar en la misma red WiFi que tu computador, y escanea el código QR que aparece en la terminal al correr `npm start`.
+
+**Limitación conocida:** Expo Go de la tienda solo soporta la versión de SDK de Expo más reciente que haya publicado. Si este proyecto usa un SDK más nuevo que el que soporta la app de la tienda (mensaje "Project is incompatible with this version of Expo Go"), esa vía no va a funcionar hasta que Expo Go se actualice — usa el simulador, la versión web, o la build nativa de abajo mientras tanto.
+
+### Desde tu celular, con una build nativa (bypasea la limitación de Expo Go)
+
+Conecta el iPhone por cable USB a una Mac con Xcode instalado, activa "Modo desarrollador" en el teléfono (Ajustes → Privacidad y seguridad) y confía en la computadora cuando lo pida. Luego:
+
+```bash
+npx expo run:ios --device
+```
+
+Esto genera el proyecto nativo (`expo prebuild`), instala CocoaPods si falta, compila con Xcode e instala la app directamente en el teléfono — sin pasar por Expo Go, así que no importa qué SDK soporte la app de la tienda. La primera compilación tarda varios minutos; las siguientes son más rápidas. Requiere una cuenta de Apple (gratuita) configurada como equipo de firma en Xcode.
 
 Otros comandos:
 
@@ -77,6 +118,7 @@ npm run format:check # Prettier sin escribir, falla si algo está mal formateado
 - `app/` — pantallas y navegación (Expo Router, basado en archivos).
 - `docs/proposal/` — la propuesta del MVP y el backlog completo.
 - `docs/specs/` — specs de cada ciclo de trabajo, versionadas.
+- `docs/superpowers/plans/` — planes de implementación de cada ciclo.
 - `docs/adr/` — decisiones de arquitectura documentadas.
 - `docs/DEFINITION_OF_DONE.md` — checklist de cierre para cualquier ticket.
 - `CLAUDE.md` — el ciclo de desarrollo y las convenciones del repo, para humanos y agentes de IA.

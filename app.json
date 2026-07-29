@@ -43,6 +43,14 @@
           "locationAlwaysAndWhenInUsePermission": false,
           "locationAlwaysPermission": false
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permite que SAMA acceda a tus fotos para adjuntarlas a un reporte.",
+          "cameraPermission": "Permite que SAMA use la cámara para tomar una foto de tu reporte.",
+          "microphonePermission": false
+        }
       ]
     ],
     "experiments": {

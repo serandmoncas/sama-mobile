@@ -35,7 +35,7 @@ Detalle completo de alcance, lo que queda explícitamente fuera del MVP, y las 4
 
 ## Estado actual
 
-8 ciclos de trabajo mergeados a `main`, cada uno con su spec, plan de implementación y revisión de código (ver [`docs/specs/`](docs/specs/) y [`docs/superpowers/plans/`](docs/superpowers/plans/)):
+9 ciclos de trabajo mergeados a `main`, cada uno con su spec, plan de implementación y revisión de código (ver [`docs/specs/`](docs/specs/) y [`docs/superpowers/plans/`](docs/superpowers/plans/)):
 
 - ✅ **Harness** (adaptado de E0-05) — esqueleto de la app, tooling, CI, convenciones de spec/ADR.
 - ✅ **E1-02** — sistema de diseño en código (tokens + componentes base).
@@ -45,16 +45,13 @@ Detalle completo de alcance, lo que queda explícitamente fuera del MVP, y las 4
 - ✅ **Ampliación de municipios** — el selector de onboarding pasó de 3 a 28 municipios (Valle de Aburrá + los 15 más poblados del resto de Antioquia, población DANE), con aviso explícito de cuáles tienen estaciones SAMA confirmadas y cuáles no.
 - ✅ **E5-02** — directorio de emergencia por municipio (CMGRD, Bomberos, Defensa Civil), con botón de llamada real listo para cuando exista un teléfono verificado.
 - ✅ **E3-01** — mapa base con MapLibre, centrado en Antioquia con tiles reales de OpenFreeMap, y botón de ubicación opt-in. Primera dependencia nativa del proyecto — ver la nota en "Cómo correrlo" sobre qué implica para el tab "Mapa".
+- ✅ **E6-01 + E6-02** — formulario de reporte ciudadano (foto comprimida <500KB verificado de verdad, categoría, ubicación automática con ajuste manual en mini-mapa, alias/teléfono opcionales) con cola local persistente. Sin backend todavía, cada reporte queda honestamente marcado "Pendiente de envío — el panel de Dagran no existe todavía", nunca simulado como enviado.
 
 ### Qué falta
 
-Siguiente en el backlog, sin bloqueo externo:
+Con E6-01/E6-02 mergeado, ya no queda ningún ticket del backlog ejecutable solo con código en este repo. Todo lo que resta depende de trabajo externo:
 
-- **E6-01** — formulario de reporte ciudadano (foto + ubicación + categoría, cola offline).
-
-Todo lo demás depende de trabajo que no se resuelve solo con código en este repo:
-
-- **El BFF** (backend, repo aparte) no existe todavía — bloquea el mapa con datos reales, las alertas push, y una caché offline con sentido (E1-04, épicas E2/E3-02/E3-03/E4).
+- **El BFF** (backend, repo aparte) no existe todavía — bloquea el mapa con datos reales, las alertas push, una caché offline con sentido (E1-04, épicas E2/E3-02/E3-03/E4), y el envío real de los reportes ciudadanos ya en cola (E6-03 panel de moderación, E6-04 anti-abuso).
 - **E0-02** (inventario y prueba de fuentes de datos SAMA) y el resto de la épica E0 requieren trabajo directo con Dagran/G-LIMA — talleres, acceso a APIs reales, protocolo de niveles firmado. No es código, es gestión del proyecto.
 - **Contenido real** (recomendaciones de "¿Qué hago?" validadas por el equipo social del SAMA, teléfonos de emergencia reales) queda intencionalmente marcado como pendiente en la app — no se fabricó contenido de protección civil ni números de emergencia sin una fuente verificable, tratándose de una app de alertas para emergencias reales.
 

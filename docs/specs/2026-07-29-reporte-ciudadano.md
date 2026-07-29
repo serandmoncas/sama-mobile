@@ -21,17 +21,17 @@
 
 ## Criterios de aceptación
 
-- [ ] CA1: el tab "Reportar" muestra un formulario con foto, categoría, ubicación, alias y teléfono (en vez del placeholder actual).
-- [ ] CA2: el usuario puede tomar una foto con la cámara o elegir una de la galería.
-- [ ] CA3: la foto queda comprimida a menos de 500KB de verdad (verificado leyendo el tamaño real del archivo, no solo confiando en el parámetro de calidad del selector).
-- [ ] CA4: hay un selector de categoría con las 4 opciones del backlog: nivel del río, deslizamiento, obstrucción, otro.
-- [ ] CA5: al abrir el formulario se pide el permiso de ubicación automáticamente; si se concede, se coloca un pin inicial en la posición del usuario sobre un mini-mapa.
-- [ ] CA6: el usuario puede tocar el mini-mapa para mover el pin y ajustar la ubicación manualmente, sin importar si el permiso automático se concedió o no.
-- [ ] CA7: alias y teléfono son campos de texto opcionales.
-- [ ] CA8: al enviar, se valida que existan foto, categoría y ubicación (alias/teléfono no se validan, son opcionales); si falta algo, no se guarda el reporte y se indica qué falta.
-- [ ] CA9: un reporte válido se guarda en una cola local persistente (sobrevive a cerrar y reabrir la app), con estado "Pendiente de envío — el panel de Dagran no existe todavía" — nunca se marca como enviado de verdad.
-- [ ] CA10: la cola de reportes pendientes es visible en la misma pantalla "Reportar", debajo del formulario.
-- [ ] CA11: los elementos interactivos siguen las convenciones de accesibilidad ya establecidas (`accessibilityRole`, `accessibilityLabel`/`accessibilityState` según aplique, `minHeight` de 44px en botones).
+- [x] CA1: el tab "Reportar" muestra un formulario con foto, categoría, ubicación, alias y teléfono (en vez del placeholder actual).
+- [x] CA2: el usuario puede tomar una foto con la cámara o elegir una de la galería.
+- [x] CA3: la foto queda comprimida a menos de 500KB de verdad (verificado leyendo el tamaño real del archivo, no solo confiando en el parámetro de calidad del selector).
+- [x] CA4: hay un selector de categoría con las 4 opciones del backlog: nivel del río, deslizamiento, obstrucción, otro.
+- [x] CA5: al abrir el formulario se pide el permiso de ubicación automáticamente; si se concede, se coloca un pin inicial en la posición del usuario sobre un mini-mapa.
+- [x] CA6: el usuario puede tocar el mini-mapa para mover el pin y ajustar la ubicación manualmente, sin importar si el permiso automático se concedió o no.
+- [x] CA7: alias y teléfono son campos de texto opcionales.
+- [x] CA8: al enviar, se valida que existan foto, categoría y ubicación (alias/teléfono no se validan, son opcionales); si falta algo, no se guarda el reporte y se indica qué falta.
+- [x] CA9: un reporte válido se guarda en una cola local persistente (sobrevive a cerrar y reabrir la app), con estado "Pendiente de envío — el panel de Dagran no existe todavía" — nunca se marca como enviado de verdad.
+- [x] CA10: la cola de reportes pendientes es visible en la misma pantalla "Reportar", debajo del formulario.
+- [x] CA11: los elementos interactivos siguen las convenciones de accesibilidad ya establecidas (`accessibilityRole`, `accessibilityLabel`/`accessibilityState` según aplique, `minHeight` de 44px en botones).
 
 ## Restricciones
 

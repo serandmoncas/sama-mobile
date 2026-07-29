@@ -286,11 +286,11 @@ export default function ReportarScreen() {
           accessibilityRole="button"
           accessibilityLabel="Enviar reporte"
           style={[
-            styles.enviarButton,
+            styles.submitButton,
             { backgroundColor: colors.tint, opacity: submitting ? 0.5 : 1 },
           ]}
         >
-          <Text style={styles.enviarButtonLabel}>
+          <Text style={styles.submitButtonLabel}>
             {submitting ? 'Guardando...' : 'Enviar reporte'}
           </Text>
         </Pressable>
@@ -301,11 +301,11 @@ export default function ReportarScreen() {
             <Text>Aún no has enviado ningún reporte.</Text>
           ) : (
             reports.map((report) => (
-              <View key={report.id} style={styles.reporteRow}>
+              <View key={report.id} style={styles.reportRow}>
                 <Text>
                   {CATEGORIES.find((c) => c.id === report.category)?.label}
                 </Text>
-                <Text style={styles.reporteEstado}>
+                <Text style={styles.reportStatus}>
                   Pendiente de envío — el panel de Dagran no existe todavía
                 </Text>
               </View>
@@ -380,22 +380,22 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
   },
-  enviarButton: {
+  submitButton: {
     minHeight: 44,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  enviarButtonLabel: {
+  submitButtonLabel: {
     ...Typography.body,
     color: 'white',
     fontWeight: '600',
   },
-  reporteRow: {
+  reportRow: {
     gap: Spacing.xs,
     paddingVertical: Spacing.sm,
   },
-  reporteEstado: {
+  reportStatus: {
     ...Typography.caption,
   },
 });

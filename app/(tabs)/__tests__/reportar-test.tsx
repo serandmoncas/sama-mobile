@@ -104,14 +104,14 @@ test('el título tiene accessibilityRole header', async () => {
 
 test('los botones de foto tienen accessibilityRole, label y área tocable de 44px', async () => {
   await render(<ReportarScreen />);
-  const tomarFoto = screen.getByTestId('boton-tomar-foto');
-  expect(tomarFoto.props.accessibilityRole).toBe('button');
-  expect(tomarFoto.props.accessibilityLabel).toBe('Tomar foto');
-  const flatStyle = Object.assign({}, ...tomarFoto.props.style);
+  const takePhoto = screen.getByTestId('boton-tomar-foto');
+  expect(takePhoto.props.accessibilityRole).toBe('button');
+  expect(takePhoto.props.accessibilityLabel).toBe('Tomar foto');
+  const flatStyle = Object.assign({}, ...takePhoto.props.style);
   expect(flatStyle.minHeight).toBe(44);
 
-  const elegirGaleria = screen.getByTestId('boton-elegir-galeria');
-  expect(elegirGaleria.props.accessibilityLabel).toBe('Elegir de galería');
+  const pickFromGallery = screen.getByTestId('boton-elegir-galeria');
+  expect(pickFromGallery.props.accessibilityLabel).toBe('Elegir de galería');
 });
 
 test('tomar foto pide permiso de cámara y muestra la vista previa', async () => {

@@ -35,7 +35,7 @@ Detalle completo de alcance, lo que queda explícitamente fuera del MVP, y las 4
 
 ## Estado actual
 
-7 ciclos de trabajo mergeados a `main`, cada uno con su spec, plan de implementación y revisión de código (ver [`docs/specs/`](docs/specs/) y [`docs/superpowers/plans/`](docs/superpowers/plans/)):
+8 ciclos de trabajo mergeados a `main`, cada uno con su spec, plan de implementación y revisión de código (ver [`docs/specs/`](docs/specs/) y [`docs/superpowers/plans/`](docs/superpowers/plans/)):
 
 - ✅ **Harness** (adaptado de E0-05) — esqueleto de la app, tooling, CI, convenciones de spec/ADR.
 - ✅ **E1-02** — sistema de diseño en código (tokens + componentes base).
@@ -44,12 +44,12 @@ Detalle completo de alcance, lo que queda explícitamente fuera del MVP, y las 4
 - ✅ **E5-01** — módulo "¿Qué hago?" (recomendaciones antes/durante/después por tipo de evento).
 - ✅ **Ampliación de municipios** — el selector de onboarding pasó de 3 a 28 municipios (Valle de Aburrá + los 15 más poblados del resto de Antioquia, población DANE), con aviso explícito de cuáles tienen estaciones SAMA confirmadas y cuáles no.
 - ✅ **E5-02** — directorio de emergencia por municipio (CMGRD, Bomberos, Defensa Civil), con botón de llamada real listo para cuando exista un teléfono verificado.
+- ✅ **E3-01** — mapa base con MapLibre, centrado en Antioquia con tiles reales de OpenFreeMap, y botón de ubicación opt-in. Primera dependencia nativa del proyecto — ver la nota en "Cómo correrlo" sobre qué implica para el tab "Mapa".
 
 ### Qué falta
 
 Siguiente en el backlog, sin bloqueo externo:
 
-- **E3-01** — mapa base con MapLibre (shell de UI; sin datos de estaciones reales todavía, eso depende de E0-02/E2).
 - **E6-01** — formulario de reporte ciudadano (foto + ubicación + categoría, cola offline).
 
 Todo lo demás depende de trabajo que no se resuelve solo con código en este repo:
@@ -62,9 +62,9 @@ Detalle completo de las 48 tareas originales y su estado: [`docs/proposal/backlo
 
 ## Capturas
 
-| Onboarding                                             | Selector de municipio (28, con aviso de cobertura)                   | Inicio                                 | "¿Qué hago?" + directorio                  |
-| ------------------------------------------------------ | -------------------------------------------------------------------- | -------------------------------------- | ------------------------------------------ |
-| ![Onboarding](docs/screenshots/onboarding-welcome.png) | ![Selector de municipio](docs/screenshots/onboarding-municipios.png) | ![Inicio](docs/screenshots/inicio.png) | ![Qué hago](docs/screenshots/que-hago.png) |
+| Onboarding                                             | Selector de municipio (28, con aviso de cobertura)                   | Inicio                                 | "¿Qué hago?" + directorio                  | Mapa (MapLibre)                    |
+| ------------------------------------------------------ | -------------------------------------------------------------------- | -------------------------------------- | ------------------------------------------ | ---------------------------------- |
+| ![Onboarding](docs/screenshots/onboarding-welcome.png) | ![Selector de municipio](docs/screenshots/onboarding-municipios.png) | ![Inicio](docs/screenshots/inicio.png) | ![Qué hago](docs/screenshots/que-hago.png) | ![Mapa](docs/screenshots/mapa.png) |
 
 | Sistema de diseño — claro                                        | Sistema de diseño — oscuro                                       |
 | ---------------------------------------------------------------- | ---------------------------------------------------------------- |
@@ -87,13 +87,17 @@ Esto abre el menú interactivo de Expo en la terminal:
 - presiona **a** para abrir en el emulador de Android
 - presiona **w** para abrir la versión web en el navegador
 
-### Desde tu celular, con Expo Go (sin cable, más rápido)
+### ⚠️ El tab "Mapa" necesita una build nativa, no funciona en Expo Go
+
+Desde E3-01, la app usa `@maplibre/maplibre-react-native` para el mapa — es la primera dependencia nativa del proyecto. **Todas las demás pantallas siguen funcionando normalmente en Expo Go**; solo el tab "Mapa" específicamente falla ahí (error `TurboModuleRegistry.getEnforcing(...): 'MLRNCameraModule' could not be found`) porque ese módulo no viene incluido en la app de Expo Go de la tienda. Para ver el mapa de verdad necesitas la build nativa de la sección de abajo (`npx expo run:ios` / `run:android`), no `npm start` + Expo Go.
+
+### Desde tu celular, con Expo Go (sin cable, más rápido — pero sin el tab "Mapa")
 
 Instala "Expo Go" desde la App Store o Play Store, asegúrate de estar en la misma red WiFi que tu computador, y escanea el código QR que aparece en la terminal al correr `npm start`.
 
 **Limitación conocida:** Expo Go de la tienda solo soporta la versión de SDK de Expo más reciente que haya publicado. Si este proyecto usa un SDK más nuevo que el que soporta la app de la tienda (mensaje "Project is incompatible with this version of Expo Go"), esa vía no va a funcionar hasta que Expo Go se actualice — usa el simulador, la versión web, o la build nativa de abajo mientras tanto.
 
-### Desde tu celular, con una build nativa (bypasea la limitación de Expo Go)
+### Desde tu celular, con una build nativa (necesaria para el mapa; también evita la limitación de Expo Go)
 
 Conecta el iPhone por cable USB a una Mac con Xcode instalado, activa "Modo desarrollador" en el teléfono (Ajustes → Privacidad y seguridad) y confía en la computadora cuando lo pida. Luego:
 
@@ -101,7 +105,9 @@ Conecta el iPhone por cable USB a una Mac con Xcode instalado, activa "Modo desa
 npx expo run:ios --device
 ```
 
-Esto genera el proyecto nativo (`expo prebuild`), instala CocoaPods si falta, compila con Xcode e instala la app directamente en el teléfono — sin pasar por Expo Go, así que no importa qué SDK soporte la app de la tienda. La primera compilación tarda varios minutos; las siguientes son más rápidas. Requiere una cuenta de Apple (gratuita) configurada como equipo de firma en Xcode.
+Esto genera el proyecto nativo (`expo prebuild`), instala CocoaPods si falta, compila con Xcode e instala la app directamente en el teléfono — sin pasar por Expo Go, así que no importa qué SDK soporte la app de la tienda, y el tab "Mapa" funciona. La primera compilación tarda varios minutos; las siguientes son más rápidas. Requiere una cuenta de Apple (gratuita) configurada como equipo de firma en Xcode (Xcode → Settings → Accounts).
+
+Para el simulador de iOS, el mismo comando funciona apuntando a un simulador booteado: `npx expo run:ios --device <nombre-o-udid-del-simulador>`.
 
 Otros comandos:
 

@@ -26,10 +26,12 @@
 ### Task 1: Install native dependencies and configure the image-picker plugin
 
 **Files:**
+
 - Modify: `package.json`, `package-lock.json` (via `npx expo install`)
 - Modify: `app.json`
 
 **Interfaces:**
+
 - Produces: `expo-image-picker`, `expo-image-manipulator`, `expo-file-system` available as installed packages for Task 2/3 to import from.
 
 - [ ] **Step 1: Install the three packages via the Expo CLI (keeps versions aligned with the installed Expo SDK)**
@@ -43,14 +45,14 @@ Expected: command exits 0; `package.json` gains three new entries under `depende
 Open `app.json`. Inside the `"plugins"` array, immediately after the existing `expo-location` plugin block (the one ending `"locationAlwaysPermission": false }]`), add:
 
 ```json
-      [
-        "expo-image-picker",
-        {
-          "photosPermission": "Permite que SAMA acceda a tus fotos para adjuntarlas a un reporte.",
-          "cameraPermission": "Permite que SAMA use la cámara para tomar una foto de tu reporte.",
-          "microphonePermission": false
-        }
-      ]
+[
+  "expo-image-picker",
+  {
+    "photosPermission": "Permite que SAMA acceda a tus fotos para adjuntarlas a un reporte.",
+    "cameraPermission": "Permite que SAMA use la cámara para tomar una foto de tu reporte.",
+    "microphonePermission": false
+  }
+]
 ```
 
 The `"plugins"` array must remain valid JSON — this new block is a sibling entry, comma-separated from the `expo-location` block before it and the closing `]` of the array after it. `expo-file-system` and `expo-image-manipulator` do not need plugin entries — they have no permission-gated native config.
@@ -75,10 +77,12 @@ git commit -m "Add expo-image-picker, expo-image-manipulator, expo-file-system d
 ### Task 2: Local reports queue library
 
 **Files:**
+
 - Create: `lib/reportes.ts`
 - Test: `lib/__tests__/reportes-test.ts`
 
 **Interfaces:**
+
 - Consumes: `@react-native-async-storage/async-storage` (already a project dependency; `AsyncStorage.getItem`/`setItem`).
 - Produces (consumed by Task 3):
   - `type CategoriaReporte = 'nivel_rio' | 'deslizamiento' | 'obstruccion' | 'otro'`
@@ -213,11 +217,13 @@ git commit -m "Add local reports queue library backed by AsyncStorage"
 ### Task 3: Reportar screen — form, verified photo compression, mini-map, pending queue
 
 **Files:**
+
 - Create: `constants/Reportar.ts`
 - Modify: `app/(tabs)/reportar.tsx` (currently a placeholder — replace entirely)
 - Test: `app/(tabs)/__tests__/reportar-test.tsx` (currently a single placeholder test — replace entirely)
 
 **Interfaces:**
+
 - Consumes:
   - From Task 2: `agregarReporte`, `getReportes`, `type CategoriaReporte`, `type Reporte` from `@/lib/reportes`.
   - `Text`, `View` from `@/components/Themed`.

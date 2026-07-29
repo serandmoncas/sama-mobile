@@ -133,7 +133,7 @@ export default function ReportarScreen() {
       const compressedPhoto = await compressPhoto(photoUri);
       await addReport({
         photoUri: compressedPhoto,
-        categoria: category,
+        category,
         lngLat,
         alias: alias.trim() || null,
         phone: phone.trim() || null,
@@ -205,7 +205,7 @@ export default function ReportarScreen() {
                   accessibilityRole="tab"
                   accessibilityState={{ selected: isSelected }}
                   style={[
-                    styles.categoriaTab,
+                    styles.categoryTab,
                     {
                       borderColor: isSelected ? colors.tint : colors.border,
                       backgroundColor: isSelected
@@ -303,7 +303,7 @@ export default function ReportarScreen() {
             reports.map((report) => (
               <View key={report.id} style={styles.reporteRow}>
                 <Text>
-                  {CATEGORIES.find((c) => c.id === report.categoria)?.label}
+                  {CATEGORIES.find((c) => c.id === report.category)?.label}
                 </Text>
                 <Text style={styles.reporteEstado}>
                   Pendiente de envío — el panel de Dagran no existe todavía
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 8,
   },
-  categoriaTab: {
+  categoryTab: {
     borderWidth: 1,
     borderRadius: 8,
     minHeight: 44,

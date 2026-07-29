@@ -16,7 +16,7 @@ test('getReportes es [] por defecto', async () => {
 test('agregarReporte persiste el reporte con estado pendiente', async () => {
   const report = await addReport({
     photoUri: 'file:///documento/reporte-1.jpg',
-    categoria: 'nivel_rio',
+    category: 'nivel_rio',
     lngLat: [-75.5, 6.9],
     alias: null,
     phone: null,
@@ -33,14 +33,14 @@ test('agregarReporte persiste el reporte con estado pendiente', async () => {
 test('agregarReporte acumula varios reportes', async () => {
   await addReport({
     photoUri: 'file:///documento/reporte-1.jpg',
-    categoria: 'nivel_rio',
+    category: 'nivel_rio',
     lngLat: [-75.5, 6.9],
     alias: null,
     phone: null,
   });
   await addReport({
     photoUri: 'file:///documento/reporte-2.jpg',
-    categoria: 'deslizamiento',
+    category: 'deslizamiento',
     lngLat: [-75.6, 7.0],
     alias: 'Juan',
     phone: '3001234567',

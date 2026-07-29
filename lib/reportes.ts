@@ -8,7 +8,7 @@ export type ReportCategory =
 export type Report = {
   id: string;
   photoUri: string;
-  categoria: ReportCategory;
+  category: ReportCategory;
   lngLat: [number, number];
   alias: string | null;
   phone: string | null;

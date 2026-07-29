@@ -21,61 +21,61 @@ import Typography from '@/constants/Typography';
 import {
   ANTIOQUIA_CENTER,
   ANTIOQUIA_ZOOM,
-  CATEGORIAS,
-  MAX_FOTO_BYTES,
+  CATEGORIES,
+  MAX_PHOTO_BYTES,
 } from '@/constants/Reportar';
 import {
-  agregarReporte,
-  getReportes,
-  type CategoriaReporte,
-  type Reporte,
+  addReport,
+  getReports,
+  type ReportCategory,
+  type Report,
 } from '@/lib/reportes';
 
-async function comprimirFoto(uriOriginal: string): Promise<string> {
-  let ancho: number | undefined = undefined;
-  let uriFinal = uriOriginal;
+async function compressPhoto(originalUri: string): Promise<string> {
+  let width: number | undefined = undefined;
+  let finalUri = originalUri;
 
-  for (let intento = 0; intento < 5; intento++) {
-    const contexto = ancho
-      ? ImageManipulator.manipulate(uriOriginal).resize({ width: ancho })
-      : ImageManipulator.manipulate(uriOriginal);
-    const imagen = await contexto.renderAsync();
-    const resultado = await imagen.saveAsync({
+  for (let attempt = 0; attempt < 5; attempt++) {
+    const context = width
+      ? ImageManipulator.manipulate(originalUri).resize({ width })
+      : ImageManipulator.manipulate(originalUri);
+    const image = await context.renderAsync();
+    const result = await image.saveAsync({
       compress: 0.6,
       format: SaveFormat.JPEG,
     });
-    const archivo = new File(resultado.uri);
-    if (archivo.size !== null && archivo.size <= MAX_FOTO_BYTES) {
-      uriFinal = resultado.uri;
+    const file = new File(result.uri);
+    if (file.size !== null && file.size <= MAX_PHOTO_BYTES) {
+      finalUri = result.uri;
       break;
     }
-    uriFinal = resultado.uri;
-    ancho = Math.round((ancho ?? imagen.width) * 0.7);
+    finalUri = result.uri;
+    width = Math.round((width ?? image.width) * 0.7);
   }
 
-  const destino = new File(Paths.document, `reporte-${Date.now()}.jpg`);
-  const origen = new File(uriFinal);
-  origen.copy(destino);
-  return destino.uri;
+  const destination = new File(Paths.document, `reporte-${Date.now()}.jpg`);
+  const source = new File(finalUri);
+  source.copy(destination);
+  return destination.uri;
 }
 
 export default function ReportarScreen() {
-  const [fotoUri, setFotoUri] = useState<string | null>(null);
-  const [categoria, setCategoria] = useState<CategoriaReporte | null>(null);
+  const [photoUri, setPhotoUri] = useState<string | null>(null);
+  const [category, setCategory] = useState<ReportCategory | null>(null);
   const [lngLat, setLngLat] = useState<[number, number] | null>(null);
   const [alias, setAlias] = useState('');
-  const [telefono, setTelefono] = useState('');
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [enviando, setEnviando] = useState(false);
-  const [reportes, setReportes] = useState<Reporte[]>([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [reports, setReports] = useState<Report[]>([]);
   const theme = useColorScheme();
   const colors = Colors[theme];
 
   useFocusEffect(
     useCallback(() => {
       let cancelled = false;
-      getReportes().then((lista) => {
-        if (!cancelled) setReportes(lista);
+      getReports().then((list) => {
+        if (!cancelled) setReports(list);
       });
       return () => {
         cancelled = true;
@@ -89,11 +89,11 @@ export default function ReportarScreen() {
       (async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted' || cancelled) return;
-        const posicion = await Location.getCurrentPositionAsync();
+        const position = await Location.getCurrentPositionAsync();
         if (cancelled) return;
         setLngLat(
-          (actual) =>
-            actual ?? [posicion.coords.longitude, posicion.coords.latitude],
+          (current) =>
+            current ?? [position.coords.longitude, position.coords.latitude],
         );
       })();
       return () => {
@@ -102,51 +102,52 @@ export default function ReportarScreen() {
     }, []),
   );
 
-  async function handleTomarFoto() {
+  async function handleTakePhoto() {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') return;
-    const resultado = await ImagePicker.launchCameraAsync({ quality: 0.8 });
-    if (!resultado.canceled && resultado.assets[0]) {
-      setFotoUri(resultado.assets[0].uri);
+    const result = await ImagePicker.launchCameraAsync({ quality: 0.8 });
+    if (!result.canceled && result.assets[0]) {
+      setPhotoUri(result.assets[0].uri);
     }
   }
 
-  async function handleElegirGaleria() {
+  async function handlePickFromGallery() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') return;
-    const resultado = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       quality: 0.8,
     });
-    if (!resultado.canceled && resultado.assets[0]) {
-      setFotoUri(resultado.assets[0].uri);
+    if (!result.canceled && result.assets[0]) {
+      setPhotoUri(result.assets[0].uri);
     }
   }
 
-  async function handleEnviar() {
-    if (!fotoUri || !categoria || !lngLat) {
+  async function handleSubmit() {
+    if (!photoUri || !category || !lngLat) {
       setError('Falta foto, categoría o ubicación.');
       return;
     }
     setError(null);
-    setEnviando(true);
+    setSubmitting(true);
     try {
-      const fotoComprimida = await comprimirFoto(fotoUri);
-      await agregarReporte({
-        fotoUri: fotoComprimida,
-        categoria,
+      const compressedPhoto = await compressPhoto(photoUri);
+      await addReport({
+        photoUri: compressedPhoto,
+        categoria: category,
         lngLat,
         alias: alias.trim() || null,
-        telefono: telefono.trim() || null,
+        phone: phone.trim() || null,
       });
-      setFotoUri(null);
-      setCategoria(null);
+      setPhotoUri(null);
+      setCategory(null);
       setAlias('');
-      setTelefono('');
-      setReportes(await getReportes());
-    } catch {
+      setPhone('');
+      setReports(await getReports());
+    } catch (err) {
+      console.error('Error al guardar el reporte:', err);
       setError('No se pudo guardar el reporte, intenta de nuevo.');
     } finally {
-      setEnviando(false);
+      setSubmitting(false);
     }
   }
 
@@ -165,7 +166,7 @@ export default function ReportarScreen() {
           <View style={styles.rowButtons}>
             <Pressable
               testID="boton-tomar-foto"
-              onPress={handleTomarFoto}
+              onPress={handleTakePhoto}
               accessibilityRole="button"
               accessibilityLabel="Tomar foto"
               style={[styles.button, { borderColor: colors.border }]}
@@ -174,7 +175,7 @@ export default function ReportarScreen() {
             </Pressable>
             <Pressable
               testID="boton-elegir-galeria"
-              onPress={handleElegirGaleria}
+              onPress={handlePickFromGallery}
               accessibilityRole="button"
               accessibilityLabel="Elegir de galería"
               style={[styles.button, { borderColor: colors.border }]}
@@ -182,10 +183,10 @@ export default function ReportarScreen() {
               <Text>Elegir de galería</Text>
             </Pressable>
           </View>
-          {fotoUri && (
+          {photoUri && (
             <Image
               testID="foto-preview"
-              source={{ uri: fotoUri }}
+              source={{ uri: photoUri }}
               style={styles.preview}
             />
           )}
@@ -194,13 +195,13 @@ export default function ReportarScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>Categoría</Text>
           <View style={styles.rowButtons}>
-            {CATEGORIAS.map((item) => {
-              const isSelected = item.id === categoria;
+            {CATEGORIES.map((item) => {
+              const isSelected = item.id === category;
               return (
                 <Pressable
                   key={item.id}
                   testID={`categoria-${item.id}`}
-                  onPress={() => setCategoria(item.id)}
+                  onPress={() => setCategory(item.id)}
                   accessibilityRole="tab"
                   accessibilityState={{ selected: isSelected }}
                   style={[
@@ -262,8 +263,8 @@ export default function ReportarScreen() {
           <Text style={styles.sectionLabel}>Teléfono (opcional)</Text>
           <TextInput
             testID="input-telefono"
-            value={telefono}
-            onChangeText={setTelefono}
+            value={phone}
+            onChangeText={setPhone}
             keyboardType="phone-pad"
             style={[
               styles.input,
@@ -280,29 +281,29 @@ export default function ReportarScreen() {
 
         <Pressable
           testID="boton-enviar"
-          onPress={handleEnviar}
-          disabled={enviando}
+          onPress={handleSubmit}
+          disabled={submitting}
           accessibilityRole="button"
           accessibilityLabel="Enviar reporte"
           style={[
             styles.enviarButton,
-            { backgroundColor: colors.tint, opacity: enviando ? 0.5 : 1 },
+            { backgroundColor: colors.tint, opacity: submitting ? 0.5 : 1 },
           ]}
         >
           <Text style={styles.enviarButtonLabel}>
-            {enviando ? 'Guardando...' : 'Enviar reporte'}
+            {submitting ? 'Guardando...' : 'Enviar reporte'}
           </Text>
         </Pressable>
 
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>Mis reportes</Text>
-          {reportes.length === 0 ? (
+          {reports.length === 0 ? (
             <Text>Aún no has enviado ningún reporte.</Text>
           ) : (
-            reportes.map((reporte) => (
-              <View key={reporte.id} style={styles.reporteRow}>
+            reports.map((report) => (
+              <View key={report.id} style={styles.reporteRow}>
                 <Text>
-                  {CATEGORIAS.find((c) => c.id === reporte.categoria)?.label}
+                  {CATEGORIES.find((c) => c.id === report.categoria)?.label}
                 </Text>
                 <Text style={styles.reporteEstado}>
                   Pendiente de envío — el panel de Dagran no existe todavía

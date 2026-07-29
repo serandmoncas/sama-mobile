@@ -52,14 +52,14 @@ const mockedRequestLocation =
 const mockedGetPosition = Location.getCurrentPositionAsync as jest.Mock;
 const mockedRequestCamera =
   ImagePicker.requestCameraPermissionsAsync as jest.Mock;
-const mockedRequestGaleria =
+const mockedRequestGallery =
   ImagePicker.requestMediaLibraryPermissionsAsync as jest.Mock;
 const mockedLaunchCamera = ImagePicker.launchCameraAsync as jest.Mock;
-const mockedLaunchGaleria = ImagePicker.launchImageLibraryAsync as jest.Mock;
+const mockedLaunchGallery = ImagePicker.launchImageLibraryAsync as jest.Mock;
 const mockedManipulate = ImageManipulator.manipulate as jest.Mock;
 const MockedFile = File as unknown as jest.Mock;
 
-function mockCompresionExitosa() {
+function mockSuccessfulCompression() {
   mockedManipulate.mockReturnValue({
     resize: jest.fn().mockReturnThis(),
     renderAsync: jest.fn().mockResolvedValue({
@@ -77,7 +77,7 @@ function mockCompresionExitosa() {
   }));
 }
 
-function mockCompresionFallida() {
+function mockFailedCompression() {
   mockedManipulate.mockReturnValue({
     resize: jest.fn().mockReturnThis(),
     renderAsync: jest.fn().mockRejectedValue(new Error('fallo de compresión')),
@@ -89,9 +89,9 @@ beforeEach(async () => {
   mockedRequestLocation.mockReset().mockResolvedValue({ status: 'denied' });
   mockedGetPosition.mockReset();
   mockedRequestCamera.mockReset();
-  mockedRequestGaleria.mockReset();
+  mockedRequestGallery.mockReset();
   mockedLaunchCamera.mockReset();
-  mockedLaunchGaleria.mockReset();
+  mockedLaunchGallery.mockReset();
   mockedManipulate.mockReset();
   MockedFile.mockReset();
 });
@@ -145,8 +145,8 @@ test('si se niega el permiso de cámara, no se muestra vista previa', async () =
 });
 
 test('elegir de galería pide permiso de galería y muestra la vista previa', async () => {
-  mockedRequestGaleria.mockResolvedValue({ status: 'granted' });
-  mockedLaunchGaleria.mockResolvedValue({
+  mockedRequestGallery.mockResolvedValue({ status: 'granted' });
+  mockedLaunchGallery.mockResolvedValue({
     canceled: false,
     assets: [{ uri: 'file:///galeria/foto.jpg' }],
   });
@@ -156,7 +156,7 @@ test('elegir de galería pide permiso de galería y muestra la vista previa', as
     fireEvent.press(screen.getByTestId('boton-elegir-galeria'));
   });
 
-  expect(mockedRequestGaleria).toHaveBeenCalled();
+  expect(mockedRequestGallery).toHaveBeenCalled();
   expect(screen.getByTestId('foto-preview').props.source.uri).toBe(
     'file:///galeria/foto.jpg',
   );
@@ -223,7 +223,7 @@ test('muestra un error si falta foto, categoría o ubicación al enviar', async 
 });
 
 test('envía el reporte y lo agrega a la lista de pendientes', async () => {
-  mockCompresionExitosa();
+  mockSuccessfulCompression();
   mockedRequestCamera.mockResolvedValue({ status: 'granted' });
   mockedLaunchCamera.mockResolvedValue({
     canceled: false,
@@ -257,7 +257,7 @@ test('envía el reporte y lo agrega a la lista de pendientes', async () => {
 });
 
 test('si falla el guardado, muestra un error y no agrega el reporte a la lista', async () => {
-  mockCompresionFallida();
+  mockFailedCompression();
   mockedRequestCamera.mockResolvedValue({ status: 'granted' });
   mockedLaunchCamera.mockResolvedValue({
     canceled: false,

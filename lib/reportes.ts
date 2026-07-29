@@ -1,39 +1,36 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const REPORTES_KEY = 'reportesPendientes';
+const REPORTS_KEY = 'reportesPendientes';
 
-export type CategoriaReporte =
+export type ReportCategory =
   'nivel_rio' | 'deslizamiento' | 'obstruccion' | 'otro';
 
-export type Reporte = {
+export type Report = {
   id: string;
-  fotoUri: string;
-  categoria: CategoriaReporte;
+  photoUri: string;
+  categoria: ReportCategory;
   lngLat: [number, number];
   alias: string | null;
-  telefono: string | null;
-  fecha: string;
-  estado: 'pendiente';
+  phone: string | null;
+  date: string;
+  status: 'pendiente';
 };
 
-export async function getReportes(): Promise<Reporte[]> {
-  const value = await AsyncStorage.getItem(REPORTES_KEY);
+export async function getReports(): Promise<Report[]> {
+  const value = await AsyncStorage.getItem(REPORTS_KEY);
   return value ? JSON.parse(value) : [];
 }
 
-export async function agregarReporte(
-  datos: Omit<Reporte, 'id' | 'fecha' | 'estado'>,
-): Promise<Reporte> {
-  const reportes = await getReportes();
-  const reporte: Reporte = {
-    ...datos,
+export async function addReport(
+  data: Omit<Report, 'id' | 'date' | 'status'>,
+): Promise<Report> {
+  const reports = await getReports();
+  const report: Report = {
+    ...data,
     id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-    fecha: new Date().toISOString(),
-    estado: 'pendiente',
+    date: new Date().toISOString(),
+    status: 'pendiente',
   };
-  await AsyncStorage.setItem(
-    REPORTES_KEY,
-    JSON.stringify([...reportes, reporte]),
-  );
-  return reporte;
+  await AsyncStorage.setItem(REPORTS_KEY, JSON.stringify([...reports, report]));
+  return report;
 }

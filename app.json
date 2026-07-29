@@ -8,7 +8,8 @@
     "scheme": "sama",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.sama-mobile"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,6 +33,15 @@
           "image": "./assets/images/splash-icon.png",
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      "@maplibre/maplibre-react-native",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Permite que SAMA acceda a tu ubicación para mostrarla en el mapa.",
+          "locationAlwaysAndWhenInUsePermission": false,
+          "locationAlwaysPermission": false
         }
       ]
     ],

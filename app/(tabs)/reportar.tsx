@@ -143,6 +143,8 @@ export default function ReportarScreen() {
       setAlias('');
       setTelefono('');
       setReportes(await getReportes());
+    } catch {
+      setError('No se pudo guardar el reporte, intenta de nuevo.');
     } finally {
       setEnviando(false);
     }

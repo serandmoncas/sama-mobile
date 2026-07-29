@@ -77,6 +77,13 @@ function mockCompresionExitosa() {
   }));
 }
 
+function mockCompresionFallida() {
+  mockedManipulate.mockReturnValue({
+    resize: jest.fn().mockReturnThis(),
+    renderAsync: jest.fn().mockRejectedValue(new Error('fallo de compresión')),
+  });
+}
+
 beforeEach(async () => {
   await AsyncStorage.clear();
   mockedRequestLocation.mockReset().mockResolvedValue({ status: 'denied' });
@@ -247,4 +254,36 @@ test('envía el reporte y lo agrega a la lista de pendientes', async () => {
       'Pendiente de envío — el panel de Dagran no existe todavía',
     ),
   ).toBeTruthy();
+});
+
+test('si falla el guardado, muestra un error y no agrega el reporte a la lista', async () => {
+  mockCompresionFallida();
+  mockedRequestCamera.mockResolvedValue({ status: 'granted' });
+  mockedLaunchCamera.mockResolvedValue({
+    canceled: false,
+    assets: [{ uri: 'file:///camara/foto.jpg' }],
+  });
+
+  await render(<ReportarScreen />);
+
+  await act(async () => {
+    fireEvent.press(screen.getByTestId('boton-tomar-foto'));
+  });
+  await act(async () => {
+    fireEvent.press(screen.getByTestId('categoria-nivel_rio'));
+  });
+  await act(async () => {
+    fireEvent(screen.getByTestId('mini-mapa'), 'press', {
+      nativeEvent: { lngLat: [-75.4, 6.8] },
+    });
+  });
+
+  await act(async () => {
+    fireEvent.press(screen.getByTestId('boton-enviar'));
+  });
+
+  expect(screen.getByTestId('error-formulario')).toHaveTextContent(
+    'No se pudo guardar el reporte, intenta de nuevo.',
+  );
+  expect(screen.getByText('Aún no has enviado ningún reporte.')).toBeTruthy();
 });
